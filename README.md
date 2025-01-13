@@ -1,2 +1,2 @@
 # philosophers
-Libft, project from 42Lisbon
+Project from 42Lisbon
