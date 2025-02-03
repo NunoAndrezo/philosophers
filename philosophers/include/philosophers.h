@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/01/30 00:09:11 by nuno             ###   ########.fr       */
+/*   Updated: 2025/02/03 21:36:33 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,25 +24,26 @@
 # include <signal.h>
 # include <fcntl.h>
 # include <sys/stat.h>
-# include <sys/types.h>s
+# include <sys/types.h>
 # include <stdbool.h>
 # include <stdint.h>
 
-typedef enum	e_state
+
+typedef struct s_state
 {
-	THINKING,
-	EATING,
-	SLEEPING,
-	DEAD
+	bool	awake;
+	bool	full;
+	bool	smart;
+	bool	dead;
 }		t_state;
 
 typedef struct	s_philo
 {
 	int			id;
 	int			eat_count;
-	uint64_t		last_eat; //usigned long long
-	pthread_t		philo_thread;
 	t_state		state;
+	uint64_t	last_eat; //usigned long long
+	pthread_t	philo_thread;
 	t_philo		*next;
 	t_philo		*prev;
 }		t_philo;
@@ -54,15 +55,24 @@ typedef struct	s_philo_data
 	uint64_t		time_to_die;
 	uint64_t		time_to_eat;
 	uint64_t		time_to_sleep;
-	unsigned int	num_must_eat;
 	uint64_t		start_time;
-	pthread_mutex_t	*forks;
-	t_philo		*philosopher;
+	unsigned int	num_must_eat;
+	pthread_mutex_t	**forks;
+	t_philo			**philosophers;
 }		t_philo_data;
 
+//initiate.c
+void			get_arg(t_philo_data *data, int arc, char **arv);
+t_philo_data	*initiate_data(void);
+t_philo			*initate_philos(int n, t_philo_data *data);
+
 //main_helper.c
-void	get_arg(t_philo_data *data, int arc, char **arv);
+void			get_arg(t_philo_data *data, int arc, char **arv);
 t_philo_data	*initiate_data(void);
 
+// time.c
+uint64_t		get_time_micro(void);
+uint64_t		get_time(void);
+bool			ft_usleep(unsigned long long micro_sec);
 
 #endif
