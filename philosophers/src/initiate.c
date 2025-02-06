@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:36:29 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/03 21:36:31 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/02/06 18:39:12 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	get_arg(t_philo_data *data, int arc, char **arv)
 	if (arc == 6)
 		data->num_must_eat = ft_atoi(arv[5]);
 	else
-		data->num_must_eat = -1;
+		data->num_must_eat = -42;
 }
 
 t_philo_data	*initiate_data(void)
@@ -47,19 +47,18 @@ t_philo_data	*initiate_data(void)
 	return (data);
 }
 
-t_philo	*initate_philos(int n, t_philo_data *data)
+t_philo	*initate_philosopher(int n, t_philo_data *data)
 {
-	t_philo		*philosophers;
-	pthread_t	thread;
+	t_philo		*philosopher;
 
-	philosophers->id = n + 1;
-	philosophers->eat_count = 0;
-	philosophers->state.full = false;
-	philosophers->state.awake = false;
-	philosophers->state.smart = false;
-	philosophers->state.dead = false;
-	philosophers->last_eat = data->start_time;
-	philosophers->philo_thread = NULL;
-	philosophers->next = NULL;
-	philosophers->prev = NULL;
+	philosopher->id = n + 1;
+	philosopher->eat_count = 0;
+	philosopher->state.eating = true;
+	philosopher->state.sleeping = false;
+	philosopher->state.thinking = false;
+	philosopher->state.dead = false;
+	philosopher->time_last_eat = 0;
+	philosopher->philo_thread = NULL;
+	philosopher->data = data;
+	return (philosopher);
 }

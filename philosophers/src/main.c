@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:27:49 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/03 21:36:34 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/02/06 20:07:56 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(int arc, char **arv)
 		data = initiate_data();
 		get_arg(data, arc, arv);
 		creating_philos(data);
-		//correr o programa
+		start(data);
 	}
 	else
 	{

@@ -1,41 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time.c                                             :+:      :+:    :+:   */
+/*   start.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/03 18:26:57 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/02/06 19:10:24 by nneves-a         ###   ########.fr       */
+/*   Created: 2025/02/05 17:46:39 by nneves-a          #+#    #+#             */
+/*   Updated: 2025/02/06 20:08:14 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-uint64_t	get_time_micro(void)
+void	start(t_philo_data *data)
 {
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	return ((uint64_t)time.tv_sec * 1000000 + time.tv_usec);
-}
-
-uint64_t	get_time(void)
-{
-	return (get_time_micro() / 1000);
-}
-
-bool	ft_usleep(unsigned long long micro_sec)
-{
-	uint64_t	start;
-	uint64_t	end;
-
-	start = get_time_micro();
-	while (1)
-	{
-		end = get_time_micro();
-		if (end - start >= micro_sec)
-			return (true);
-	}
-	return (false);
+	create_forks(data);
+	data->start_time = get_time();
+	data->running = true;
+	
 }
