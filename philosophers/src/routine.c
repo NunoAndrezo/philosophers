@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:40:15 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/02/06 21:40:47 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/02/08 15:28:48 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	grabbing_forks(t_philo *philosopher)
 	pthread_mutex_t	*fork_right;
 	unsigned int	i;
 
+	i = 0;
 	if (philosopher->id % 2 == 0)
 	{
 		fork_left = philosopher->data->forks[(philosopher->id + 1)];
@@ -66,7 +67,7 @@ void	grabbing_forks(t_philo *philosopher)
 	}
 	philosopher->state.eating = true;
 	print_state(philosopher, "is eating");
-	if (philosopher->data->num_must_eat != -42)
+	if (philosopher->data->num_must_eat != 0)
 		philosopher->eat_count++;
 	ft_usleep(philosopher->data->time_to_eat);
 	philosopher->time_last_eat = get_time();
@@ -77,7 +78,7 @@ void	grabbing_forks(t_philo *philosopher)
 	ft_usleep(philosopher->data->time_to_sleep);
 	philosopher->state.sleeping = false;
 	philosopher->state.thinking = true;
-	if (philosopher->data->num_must_eat != -42
+	if (philosopher->data->num_must_eat != 0
 		&& philosopher->eat_count == philosopher->data->num_must_eat)
 	{
 		print_state(philosopher, "is thinking");

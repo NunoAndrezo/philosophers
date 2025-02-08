@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/06 20:05:53 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/02/08 15:17:18 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@
 # include <sys/types.h>
 # include <stdbool.h>
 # include <stdint.h>
-
+# include "../libft/libft.h"
+# include "../printf/ft_printf.h"
 
 typedef struct s_state
 {
@@ -41,7 +42,7 @@ typedef struct	s_philo
 {
 	unsigned int		id;
 	unsigned int		eat_count;
-	t_state				state;
+	t_state			state;
 	uint64_t			time_last_eat; //usigned long long
 	pthread_t			philo_thread;
 	struct s_philo_data	*data;
@@ -59,7 +60,7 @@ typedef struct	s_philo_data
 	uint64_t		start_time;
 	unsigned int	num_must_eat;
 	pthread_mutex_t	**forks;
-	t_philo			**philosophers;
+	t_philo		**philosophers;
 	pthread_mutex_t	*print_state;
 }		t_philo_data;
 
@@ -69,7 +70,7 @@ typedef struct	s_philo_data
 //initiate.c
 void			get_arg(t_philo_data *data, int arc, char **arv);
 t_philo_data	*initiate_data(void);
-t_philo			*initate_philosopher(int n, t_philo_data *data);
+t_philo		*initiate_philosopher(int n, t_philo *philosopher, t_philo_data *data);
 
 // time.c
 uint64_t		get_time_micro(void);
@@ -77,12 +78,12 @@ uint64_t		get_time(void);
 bool			ft_usleep(unsigned long long micro_sec);
 
 // creating_philos.c
-t_philo	*creation(t_philo_data *data, unsigned int n);
 void	creating_philos(t_philo_data *data);
+void	join_threads(t_philo_data *data);
 
 //routine.c
 void	*routine(void *philo);
-void	join_threads(t_philo_data *data);
+void	grabbing_forks(t_philo *philosopher);
 
 //mutexes.c
 void	create_forks(t_philo_data *data);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mutexes.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:48:00 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/02/05 18:57:37 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/02/08 15:24:13 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,12 @@ void	destroy_forks(t_philo_data *data)
 
 void	create_print_mutex(t_philo_data *data)
 {
-	pthread_mutex_init(&data->print_state, NULL);
+	pthread_mutex_init(data->print_state, NULL);
 }
 
 void	print_state(t_philo *philo, char *str)
 {
-	pthread_mutex_lock(&philo->data->print_state);
-	printf("%llu %d %s\n", get_time() - philo->data->start_time, philo->id, str);
-	pthread_mutex_unlock(&philo->data->print_state);
+	pthread_mutex_lock(philo->data->print_state);
+	printf("%lu %d %s\n", get_time() - philo->data->start_time, philo->id, str);
+	pthread_mutex_unlock(philo->data->print_state);
 }

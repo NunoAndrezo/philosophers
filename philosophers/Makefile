@@ -10,12 +10,13 @@ OBJ_DIR		= obj
 
 # Compiler and CFlags
 CC					= cc
-CFLAGS				= -Wall -Werror -Wextra -g -O3
+CFLAGS				= -Wall -Werror -Wextra -g -O3 -pthread
 
 rm					= rm -f
 
 # Source and Object Files
-SRC					=	src/creating_philos.c initiate.c main.c \
+SRC					=	src/creating_philos.c src/initiate.c src/main.c \
+						src/mutexes.c src/routine.c src/start.c src/time.c \
 
 OBJ					=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 
