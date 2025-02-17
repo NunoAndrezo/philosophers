@@ -6,18 +6,19 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 19:22:19 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/17 17:09:48 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/02/17 19:04:19 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../include/philosophers.h"
 
 static t_philo	*creation(unsigned int n, t_philo_data *data);
+static bool	join_threads(t_philo_data *data, unsigned int i);
 
 void	creating_philos(t_philo_data *data)
 {
 	unsigned int	i;
-	t_philo		*philo;
+	t_philo			*philo;
 	pthread_t		thread;
 
 	i = 0;
@@ -26,13 +27,17 @@ void	creating_philos(t_philo_data *data)
 		philo = creation(i, data);
 		philo->philo_thread = thread;
 		pthread_create(&thread, NULL, &routine, philo);
-		printf("meu pau\n");
+		printf("philo id: %d created\n", i + 1);
 		fflush(stdout);
 		data->philosophers[i] = philo;
 		i++;
+		if (i == data->num_of_philos)
+		{
+			data->ready_to_start = true;
+			data->running = true;
+		}
 	}
-	data->ready_to_start = true;
-	join_threads(data);
+	join_threads(data, i);
 }
 
 static t_philo	*creation(unsigned int n, t_philo_data *data)
@@ -45,14 +50,18 @@ static t_philo	*creation(unsigned int n, t_philo_data *data)
 	return (philosopher);
 }
 
-void	join_threads(t_philo_data *data)
+static bool	join_threads(t_philo_data *data, unsigned int i)
 {
-	unsigned int	i;
-
 	i = 0;
-	while (i < data->num_of_philos)
+	if (data->ready_to_start == 1 && data->running == 1)
 	{
-		pthread_join(data->philosophers[i]->philo_thread, NULL);
-		i++;
+		while (i < data->num_of_philos)
+		{
+			pthread_join(data->philosophers[i]->philo_thread, NULL);
+			printf("philo id: %d joined\n", i + 1);
+			i++;
+		}
+		
 	}
+	return (1);
 }

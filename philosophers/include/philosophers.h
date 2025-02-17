@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/17 17:06:50 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/02/17 19:00:14 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ bool			ft_usleep(unsigned long long micro_sec);
 
 // creating_philos.c
 void	creating_philos(t_philo_data *data);
-void	join_threads(t_philo_data *data);
 
 //routine.c
 void	*routine(void *philo);

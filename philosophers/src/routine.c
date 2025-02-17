@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:40:15 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/02/17 17:10:41 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/02/17 19:03:47 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,10 @@ void	*routine(void *philo)
 {
 	t_philo	*philosopher;
 
-	printf("dentro da rotina\n");
-	fflush(stdout);
 	philosopher = (t_philo *)philo;
-	while (philosopher->data->running == false
-		|| philosopher->data->ready_to_start == false)
+	while (philosopher->data->running == false || philosopher->data->ready_to_start == false)
 		ft_usleep(100);
-	if (philosopher->data->running == true
-		&& philosopher->data->ready_to_start == true)
+	if (philosopher->data->running == true && philosopher->data->ready_to_start == true)
 	{
 		grabbing_forks(philosopher);
 	}
