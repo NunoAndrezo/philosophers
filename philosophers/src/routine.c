@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:40:15 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/02/11 17:24:40 by nuno             ###   ########.fr       */
+/*   Updated: 2025/02/17 17:10:41 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,13 @@ void	*routine(void *philo)
 {
 	t_philo	*philosopher;
 
+	printf("dentro da rotina\n");
+	fflush(stdout);
 	philosopher = (t_philo *)philo;
 	while (philosopher->data->running == false
 		|| philosopher->data->ready_to_start == false)
 		ft_usleep(100);
-	while (philosopher->data->running == true
+	if (philosopher->data->running == true
 		&& philosopher->data->ready_to_start == true)
 	{
 		grabbing_forks(philosopher);

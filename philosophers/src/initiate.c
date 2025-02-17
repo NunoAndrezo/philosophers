@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initiate.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:36:29 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/08 15:25:24 by nuno             ###   ########.fr       */
+/*   Updated: 2025/02/17 17:08:07 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,8 @@ void	get_arg(t_philo_data *data, int arc, char **arv)
 		data->num_must_eat = 0;
 }
 
-t_philo_data	*initiate_data(void)
+void	initiate_data(t_philo_data *data)
 {
-	t_philo_data	*data;
-
 	data = (t_philo_data *)malloc(sizeof(t_philo_data));
 	if (!data)
 	{
@@ -44,7 +42,6 @@ t_philo_data	*initiate_data(void)
 	data->start_time = 0;
 	data->forks = NULL;
 	//pthread_mutex_init(&data->print, NULL);
-	return (data);
 }
 
 t_philo	*initiate_philosopher(int n, t_philo *philosopher, t_philo_data *data)

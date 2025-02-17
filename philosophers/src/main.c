@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:27:49 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/11 17:27:30 by nuno             ###   ########.fr       */
+/*   Updated: 2025/02/17 17:07:47 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static bool	is_args_good(char **arv, int arc);
 
 int	main(int arc, char **arv)
 {
-	t_philo_data	*data;
+	t_philo_data	data;
 
 	if ( arc == 5 || arc == 6)
 	{
@@ -25,12 +25,12 @@ int	main(int arc, char **arv)
 			write(2, "Error: Arguments are wrong\n", 27); //exemplo maximo numero de 200 philos
 			exit (EXIT_FAILURE);
 		}
-		data = initiate_data();
-		get_arg(data, arc, arv);
-		creating_philos(data);
+		initiate_data(&data);
+		get_arg(&data, arc, arv);
+		creating_philos(&data);
 		printf("Simulation started\n");
 		fflush(stdout);
-		start(data);
+		start(&data);
 	}
 	else
 	{

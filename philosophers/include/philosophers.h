@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/08 15:17:18 by nuno             ###   ########.fr       */
+/*   Updated: 2025/02/17 17:06:50 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct	s_philo_data
 	uint64_t		start_time;
 	unsigned int	num_must_eat;
 	pthread_mutex_t	**forks;
-	t_philo		**philosophers;
+	t_philo			**philosophers;
 	pthread_mutex_t	*print_state;
 }		t_philo_data;
 
@@ -69,8 +69,8 @@ typedef struct	s_philo_data
 
 //initiate.c
 void			get_arg(t_philo_data *data, int arc, char **arv);
-t_philo_data	*initiate_data(void);
-t_philo		*initiate_philosopher(int n, t_philo *philosopher, t_philo_data *data);
+void			initiate_data(t_philo_data *data);
+t_philo			*initiate_philosopher(int n, t_philo *philosopher, t_philo_data *data);
 
 // time.c
 uint64_t		get_time_micro(void);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   creating_philos.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 19:22:19 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/11 22:42:41 by nuno             ###   ########.fr       */
+/*   Updated: 2025/02/17 17:09:48 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	creating_philos(t_philo_data *data)
 		philo = creation(i, data);
 		philo->philo_thread = thread;
 		pthread_create(&thread, NULL, &routine, philo);
+		printf("meu pau\n");
+		fflush(stdout);
 		data->philosophers[i] = philo;
 		i++;
 	}
