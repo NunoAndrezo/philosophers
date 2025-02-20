@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:27:49 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/17 17:07:47 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/02/20 21:25:36 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ int	main(int arc, char **arv)
 		initiate_data(&data);
 		get_arg(&data, arc, arv);
 		creating_philos(&data);
-		printf("Simulation started\n");
-		fflush(stdout);
 		start(&data);
 	}
 	else

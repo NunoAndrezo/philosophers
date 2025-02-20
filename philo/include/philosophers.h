@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/17 19:00:14 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/02/20 21:46:21 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct	s_philo
 {
 	unsigned int		id;
 	unsigned int		eat_count;
-	t_state			state;
+	t_state				state;
 	uint64_t			time_last_eat; //usigned long long
 	pthread_t			philo_thread;
 	struct s_philo_data	*data;
@@ -50,7 +50,7 @@ typedef struct	s_philo
 
 typedef struct	s_philo_data
 {
-	bool			ready_to_start;
+	bool			philos_created;
 	bool			running;
 	unsigned int	num_of_philos;
 	unsigned int	num_of_forks;

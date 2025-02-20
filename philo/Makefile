@@ -1,5 +1,5 @@
 # Executable Name
-NAME			= philosophers
+NAME			= philo
 
 # Directories
 PRINTF		= ./printf/libftprintf.a

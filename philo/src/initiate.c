@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:36:29 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/17 17:08:07 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:13:56 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void	initiate_data(t_philo_data *data)
 	data->time_to_sleep = 0;
 	data->num_must_eat = 0;
 	data->start_time = 0;
+	data->philos_created = false;
+	data->running = false;
 	data->forks = NULL;
 	//pthread_mutex_init(&data->print, NULL);
 }
