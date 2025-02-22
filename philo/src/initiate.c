@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initiate.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:36:29 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/20 19:13:56 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/02/22 17:31:22 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	initiate_data(t_philo_data *data)
 	data->num_must_eat = 0;
 	data->start_time = 0;
 	data->philos_created = false;
+	data->reached_must_eat = false;
 	data->running = false;
 	data->forks = NULL;
 	//pthread_mutex_init(&data->print, NULL);

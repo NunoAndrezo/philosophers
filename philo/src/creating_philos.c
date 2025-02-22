@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   creating_philos.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 19:22:19 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/20 21:25:25 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/02/22 17:31:14 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../include/philosophers.h"
 
 static t_philo	*creation(unsigned int n, t_philo_data *data);
-static bool	join_threads(t_philo_data *data, unsigned int i);
 
 void	creating_philos(t_philo_data *data)
 {

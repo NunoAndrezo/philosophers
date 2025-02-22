@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/20 21:46:21 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/02/22 17:28:28 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct	s_philo_data
 {
 	bool			philos_created;
 	bool			running;
+	bool			reached_must_eat;
 	unsigned int	num_of_philos;
 	unsigned int	num_of_forks;
 	uint64_t		time_to_die;
