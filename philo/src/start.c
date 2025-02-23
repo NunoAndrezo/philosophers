@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:46:39 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/02/22 17:36:11 by nuno             ###   ########.fr       */
+/*   Updated: 2025/02/22 21:44:44 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,11 @@ static pthread_t	pthreads_creation(t_philo *philosopher);
 
 void	start(t_philo_data *data)
 {
+	printf("creating forks\n");
+	fflush(stdout);
 	create_forks(data);
+	printf("forks created\n");
+	fflush(stdout);
 	create_print_mutex(data);
 	create_threads(data);
 	data->running = true;

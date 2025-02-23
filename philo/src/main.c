@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:27:49 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/20 21:25:36 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/02/22 21:33:48 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,12 @@ static bool	is_args_good(char **arv, int arc)
 		while (arv[i][j])
 		{
 			if (arv[i][j] < '0' || arv[i][j] > '9')
-				return (false);
+			{
+				if (arv[i][j] == '-' || arv[i][j] == '+')
+					j = j;
+				else
+					return (false);
+			}
 			j++;
 		}
 		i++;

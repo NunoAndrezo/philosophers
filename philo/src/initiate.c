@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:36:29 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/22 17:31:22 by nuno             ###   ########.fr       */
+/*   Updated: 2025/02/22 21:41:53 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,7 @@ void	initiate_data(t_philo_data *data)
 	data->forks = NULL;
 	//pthread_mutex_init(&data->print, NULL);
 }
-
-t_philo	*initiate_philosopher(int n, t_philo *philosopher, t_philo_data *data)
+void	initiate_philosopher(int n, t_philo *philosopher, t_philo_data *data)
 {
 	philosopher->id = n + 1;
 	philosopher->eat_count = 0;
@@ -57,5 +56,4 @@ t_philo	*initiate_philosopher(int n, t_philo *philosopher, t_philo_data *data)
 	philosopher->state.dead = false;
 	philosopher->time_last_eat = 0;
 	philosopher->data = data;
-	return (philosopher);
 }
