@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:40:15 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/02/22 17:30:48 by nuno             ###   ########.fr       */
+/*   Updated: 2025/02/23 03:16:53 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	grabbing_forks(t_philo *philosopher)
 	unsigned int	i;
 
 	i = 0;
-	while (philosopher->data->running == true)
+	while (philosopher->data->running == true && philosopher->time_last_eat - get_time() < philosopher->data->time_to_die)
 	{
 		if (philosopher->id % 2 == 0)
 		{
@@ -48,6 +48,12 @@ void	grabbing_forks(t_philo *philosopher)
 			fork_left = philosopher->data->forks[philosopher->id];
 			fork_right = philosopher->data->forks[(philosopher->id + 1)];
 		}
+		if (fork_left == NULL || fork_right == NULL)
+		{
+			printf("Error: fork pointers are null\n");
+			fflush(stdout);
+			return ;
+		}
 		while (philosopher->eat_count > philosopher->data->philosophers[i]->eat_count)
 		{
 			ft_usleep(100);
@@ -55,6 +61,11 @@ void	grabbing_forks(t_philo *philosopher)
 			if (i == philosopher->data->num_of_philos)
 				i = 0;
 		}
+		if (philosopher->data->running == false || philosopher->time_last_eat - get_time() > philosopher->data->time_to_die || philosopher->data->reached_must_eat == true || philosopher->state.dead == true)
+			return ;
+		philosopher->state.thinking = false;
+		philosopher->state.eating = false;
+		philosopher->state.sleeping = false;
 		pthread_mutex_lock(fork_left);
 		print_state(philosopher, "has taken a fork");
 		pthread_mutex_lock(fork_right);
@@ -77,6 +88,8 @@ void	grabbing_forks(t_philo *philosopher)
 		pthread_mutex_unlock(fork_left);
 		pthread_mutex_unlock(fork_right);
 		philosopher->state.eating = false;
+		if (philosopher->data->running == false || philosopher->time_last_eat - get_time() > philosopher->data->time_to_die || philosopher->data->reached_must_eat == true || philosopher->state.dead == true)
+			return ;
 		print_state(philosopher, "is sleeping");
 		philosopher->state.sleeping = true;
 		ft_usleep(philosopher->data->time_to_sleep);
@@ -90,5 +103,19 @@ void	grabbing_forks(t_philo *philosopher)
 			philosopher->data->reached_must_eat = true;
 			return ;
 		}
+		if (philosopher->time_last_eat - get_time() > philosopher->data->time_to_die)
+		{
+			philosopher->state.dead = true;
+			print_state(philosopher, "died");
+			philosopher->data->running = false;
+			return ;
+		}
+	}
+	if (philosopher->time_last_eat - get_time() > philosopher->data->time_to_die)
+	{
+		philosopher->state.dead = true;
+		print_state(philosopher, "died");
+		philosopher->data->running = false;
+		return ;
 	}
 }

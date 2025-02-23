@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:48:00 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/02/08 15:24:13 by nuno             ###   ########.fr       */
+/*   Updated: 2025/02/23 03:11:17 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,12 @@ void	create_forks(t_philo_data *data)
 	}
 	while (i < data->num_of_forks)
 	{
+		data->forks[i] = malloc(sizeof(pthread_mutex_t));
+		if (!data->forks[i])
+		{
+			write(2, "Error: Malloc failed\n", 21);
+			exit(1); //i cant use exit function, is prohibited
+		}
 		pthread_mutex_init(data->forks[i], NULL);
 		i++;
 	}
@@ -45,6 +51,14 @@ void	destroy_forks(t_philo_data *data)
 
 void	create_print_mutex(t_philo_data *data)
 {
+	printf("creating print mutex\n");
+	fflush(stdout);
+	data->print_state = malloc(sizeof(pthread_mutex_t));
+	if (!data->print_state)
+	{
+		write(2, "Error: Malloc failed\n", 21);
+		exit(1);
+	}
 	pthread_mutex_init(data->print_state, NULL);
 }
 

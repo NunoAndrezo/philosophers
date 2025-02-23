@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:46:39 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/02/22 21:44:44 by nuno             ###   ########.fr       */
+/*   Updated: 2025/02/23 03:24:09 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,16 @@ static pthread_t	pthreads_creation(t_philo *philosopher);
 
 void	start(t_philo_data *data)
 {
-	printf("creating forks\n");
-	fflush(stdout);
 	create_forks(data);
-	printf("forks created\n");
-	fflush(stdout);
 	create_print_mutex(data);
 	create_threads(data);
 	data->running = true;
 	data->start_time = get_time();
+	printf("Time: %lu\n", data->start_time);
+	fflush(stdout);
+	ft_usleep(10000);
+	printf("Time df: %lu\n", data->start_time - get_time());
+	fflush(stdout);
 	printf("Simulation started\n");
 	fflush(stdout);
 	join_threads(data);
@@ -61,7 +62,6 @@ static void	join_threads(t_philo_data *data)
 		while (i < data->num_of_philos)
 		{
 			pthread_join(data->philosophers[i]->philo_thread, NULL);
-			printf("philo id: %d joined\n", i + 1);
 			i++;
 		}
 		
