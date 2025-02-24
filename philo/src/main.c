@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:27:49 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/22 21:33:48 by nuno             ###   ########.fr       */
+/*   Updated: 2025/02/24 22:44:30 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	main(int arc, char **arv)
 		get_arg(&data, arc, arv);
 		creating_philos(&data);
 		start(&data);
+		destroy_forks(&data);
 	}
 	else
 	{

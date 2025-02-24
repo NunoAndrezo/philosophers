@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:46:39 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/02/23 03:24:09 by nuno             ###   ########.fr       */
+/*   Updated: 2025/02/24 22:32:32 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,6 @@ void	start(t_philo_data *data)
 	create_threads(data);
 	data->running = true;
 	data->start_time = get_time();
-	printf("Time: %lu\n", data->start_time);
-	fflush(stdout);
-	ft_usleep(10000);
-	printf("Time df: %lu\n", data->start_time - get_time());
-	fflush(stdout);
 	printf("Simulation started\n");
 	fflush(stdout);
 	join_threads(data);
