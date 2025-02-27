@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:46:39 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/02/24 22:32:32 by nuno             ###   ########.fr       */
+/*   Updated: 2025/02/26 22:50:01 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,50 @@
 
 static void	join_threads(t_philo_data *data);
 static void	create_threads(t_philo_data *data);
-static pthread_t	pthreads_creation(t_philo *philosopher);
+static void	initiating_forks(t_philo_data *data);
 
 void	start(t_philo_data *data)
 {
-	create_forks(data);
 	create_print_mutex(data);
-	create_threads(data);
+	create_forks_mutex(data);
+	initiating_forks(data);
 	data->running = true;
 	data->start_time = get_time();
-	printf("Simulation started\n");
-	fflush(stdout);
+	create_threads(data);
 	join_threads(data);
 }
+static void	initiating_forks(t_philo_data *data)
+{
+	unsigned int	i;
+	
+	i = 0;
+	while (i < data->num_of_philos)
+	{
+		if (data->philosophers[i]->id == data->num_of_philos)
+		{
+			data->philosophers[i]->fork_left = data->forks[0];
+			data->philosophers[i]->fork_right = data->forks[data->philosophers[i]->id - 1];
+		}
+		else if (data->philosophers[i]->id % 2 == 0)
+		{
+			data->philosophers[i]->fork_left = data->forks[(data->philosophers[i]->id - 1)];
+			data->philosophers[i]->fork_right = data->forks[data->philosophers[i]->id];
+		}
+		else
+		{
+			data->philosophers[i]->fork_left = data->forks[data->philosophers[i]->id - 1];
+			data->philosophers[i]->fork_right = data->forks[(data->philosophers[i]->id)];
+		}
+		if (data->philosophers[i]->fork_left == NULL || data->philosophers[i]->fork_right == NULL)
+		{
+			printf("Error: fork pointers are null\n");
+			fflush(stdout);
+			return ;
+		}
+		i++;
+	}
+}
+
 static void	create_threads(t_philo_data *data)
 {
 	unsigned int	i;
@@ -34,17 +65,9 @@ static void	create_threads(t_philo_data *data)
 	i = 0;
 	while (i < data->num_of_philos)
 	{
-		data->philosophers[i]->philo_thread = pthreads_creation(data->philosophers[i]);
+		pthread_create(&data->philosophers[i]->philo_thread, NULL, &routine, data->philosophers[i]);
 		i++;
 	}
-}
-
-static pthread_t	pthreads_creation(t_philo *philosopher)
-{
-	pthread_t	thread;
-
-	pthread_create(&thread, NULL, &routine, philosopher);
-	return (thread);
 }
 
 static void	join_threads(t_philo_data *data)

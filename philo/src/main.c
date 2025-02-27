@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:27:49 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/24 22:44:30 by nuno             ###   ########.fr       */
+/*   Updated: 2025/02/26 19:29:33 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static bool	is_args_good(char **arv, int arc);
 
 int	main(int arc, char **arv)
 {
-	t_philo_data	data;
+	t_philo_data	*data;
 
 	if ( arc == 5 || arc == 6)
 	{
@@ -25,11 +25,11 @@ int	main(int arc, char **arv)
 			write(2, "Error: Arguments are wrong\n", 27); //exemplo maximo numero de 200 philos
 			exit (EXIT_FAILURE);
 		}
-		initiate_data(&data);
-		get_arg(&data, arc, arv);
-		creating_philos(&data);
-		start(&data);
-		destroy_forks(&data);
+		data = initiate_data();
+		get_arg(data, arc, arv);
+		creating_philos(data);
+		start(data);
+		destroy_forks(data);
 	}
 	else
 	{

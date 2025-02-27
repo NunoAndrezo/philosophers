@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:36:29 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/22 21:41:53 by nuno             ###   ########.fr       */
+/*   Updated: 2025/02/26 23:47:06 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,13 @@ void	get_arg(t_philo_data *data, int arc, char **arv)
 	if (arc == 6)
 		data->num_must_eat = ft_atoi(arv[5]);
 	else
-		data->num_must_eat = 0;
+		data->num_must_eat = -42;
 }
 
-void	initiate_data(t_philo_data *data)
+t_philo_data	*initiate_data(void)
 {
+	t_philo_data	*data;
+	
 	data = (t_philo_data *)malloc(sizeof(t_philo_data));
 	if (!data)
 	{
@@ -44,7 +46,9 @@ void	initiate_data(t_philo_data *data)
 	data->reached_must_eat = false;
 	data->running = false;
 	data->forks = NULL;
+	data->all_philos_have_eaten = false;
 	//pthread_mutex_init(&data->print, NULL);
+	return (data);
 }
 void	initiate_philosopher(int n, t_philo *philosopher, t_philo_data *data)
 {
@@ -56,4 +60,8 @@ void	initiate_philosopher(int n, t_philo *philosopher, t_philo_data *data)
 	philosopher->state.dead = false;
 	philosopher->time_last_eat = 0;
 	philosopher->data = data;
+	philosopher->fork_left = NULL;
+	philosopher->fork_right = NULL;
+	philosopher->have_not_eaten = true;
+	philosopher->reached_must_eat = false;
 }

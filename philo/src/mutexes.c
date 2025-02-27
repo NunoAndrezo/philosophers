@@ -6,13 +6,13 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:48:00 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/02/24 23:07:10 by nuno             ###   ########.fr       */
+/*   Updated: 2025/02/26 22:44:28 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-void	create_forks(t_philo_data *data)
+void	create_forks_mutex(t_philo_data *data)
 {
 	unsigned int	i;
 
@@ -21,7 +21,7 @@ void	create_forks(t_philo_data *data)
 	if (!data->forks)
 	{
 		write(2, "Error: Malloc failed\n", 21);
-		exit(1);
+		exit(1); //cant use exit function, is prohibited
 	}
 	while (i < data->num_of_forks)
 	{
@@ -32,12 +32,8 @@ void	create_forks(t_philo_data *data)
 			exit(1); //i cant use exit function, is prohibited
 		}
 		pthread_mutex_init(data->forks[i], NULL);
-		printf("fork %d allocated\n", i);
-		fflush(stdout);
 		i++;
 	}
-	printf("forks allocated\n");
-	fflush(stdout);
 }
 
 void	destroy_forks(t_philo_data *data)
@@ -55,8 +51,6 @@ void	destroy_forks(t_philo_data *data)
 
 void	create_print_mutex(t_philo_data *data)
 {
-	printf("creating print mutex\n");
-	fflush(stdout);
 	data->print_state = malloc(sizeof(pthread_mutex_t));
 	if (!data->print_state)
 	{
