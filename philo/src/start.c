@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:46:39 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/02/26 22:50:01 by nuno             ###   ########.fr       */
+/*   Updated: 2025/02/27 23:02:37 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ static void	initiating_forks(t_philo_data *data)
 		{
 			data->philosophers[i]->fork_left = data->forks[0];
 			data->philosophers[i]->fork_right = data->forks[data->philosophers[i]->id - 1];
+			if (data->philosophers[i]->fork_left == data->philosophers[i]->fork_right)
+				data->philosophers[i]->fork_right = NULL;
 		}
 		else if (data->philosophers[i]->id % 2 == 0)
 		{
@@ -47,12 +49,6 @@ static void	initiating_forks(t_philo_data *data)
 		{
 			data->philosophers[i]->fork_left = data->forks[data->philosophers[i]->id - 1];
 			data->philosophers[i]->fork_right = data->forks[(data->philosophers[i]->id)];
-		}
-		if (data->philosophers[i]->fork_left == NULL || data->philosophers[i]->fork_right == NULL)
-		{
-			printf("Error: fork pointers are null\n");
-			fflush(stdout);
-			return ;
 		}
 		i++;
 	}

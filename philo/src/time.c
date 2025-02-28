@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:26:57 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/02/26 23:58:15 by nuno             ###   ########.fr       */
+/*   Updated: 2025/02/27 19:37:31 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ bool	ft_usleep(unsigned long long micro_sec, uint64_t flag)
 	uint64_t	end;
 
 
-	if (flag < 0)
+	if ((long long)flag < 0)
 	{
 		start = get_time_micro();
 		while (1)
