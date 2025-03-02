@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/27 19:35:08 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/02 00:37:52 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,21 +30,13 @@
 # include "../libft/libft.h"
 # include "../printf/ft_printf.h"
 
-typedef struct s_state
-{
-	bool	sleeping;
-	bool	eating;
-	bool	thinking;
-	bool	dead;
-}		t_state;
-
 typedef struct	s_philo
 {
 	unsigned int		id;
 	int		eat_count;
 	bool				have_not_eaten;
 	bool				reached_must_eat;
-	t_state			state;
+	bool			dead;
 	uint64_t			time_last_eat; //usigned long long
 	pthread_t			philo_thread;
 	pthread_mutex_t		*fork_left;
@@ -64,10 +56,11 @@ typedef struct	s_philo_data
 	uint64_t		time_to_eat;
 	uint64_t		time_to_sleep;
 	uint64_t		start_time;
-	int	num_must_eat;
+	int			num_must_eat;
 	pthread_mutex_t	**forks;
 	t_philo		**philosophers;
 	pthread_mutex_t	*print_state;
+	pthread_mutex_t	lock;
 }		t_philo_data;
 
 //main.c
