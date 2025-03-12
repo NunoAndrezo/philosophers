@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/02 00:37:52 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/12 22:45:29 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@
 typedef struct	s_philo
 {
 	unsigned int		id;
-	int		eat_count;
+	int				eat_count;
 	bool				have_not_eaten;
 	bool				reached_must_eat;
-	bool			dead;
+	bool				dead;
 	uint64_t			time_last_eat; //usigned long long
 	pthread_t			philo_thread;
 	pthread_mutex_t		*fork_left;
@@ -61,6 +61,10 @@ typedef struct	s_philo_data
 	t_philo		**philosophers;
 	pthread_mutex_t	*print_state;
 	pthread_mutex_t	lock;
+	pthread_mutex_t	check_mtx;
+	pthread_mutex_t	helper;
+	pthread_mutex_t	philo_eaten;
+	pthread_mutex_t	philo_dead;
 }		t_philo_data;
 
 //main.c
@@ -81,7 +85,6 @@ void	creating_philos(t_philo_data *data);
 
 //routine.c
 void	*routine(void *philo);
-void	grabbing_forks(t_philo *philosopher);
 
 //mutexes.c
 void	create_forks_mutex(t_philo_data *data);

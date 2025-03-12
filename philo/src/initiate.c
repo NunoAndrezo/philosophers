@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:36:29 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/02 00:39:09 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/12 22:46:27 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@ t_philo_data	*initiate_data(void)
 {
 	t_philo_data	*data;
 	pthread_mutex_t	lock;
+	pthread_mutex_t	check_mtx;
+	pthread_mutex_t	helper;
+	pthread_mutex_t	philo_dead;
+	pthread_mutex_t	philo_eaten;
 	
 	data = (t_philo_data *)malloc(sizeof(t_philo_data));
 	if (!data)
@@ -36,7 +40,11 @@ t_philo_data	*initiate_data(void)
 		write(2, "Error: Malloc failed\n", 21);
 		exit(1);
 	}
+	pthread_mutex_init(&check_mtx, NULL);
+	pthread_mutex_init(&helper, NULL);
 	pthread_mutex_init(&lock, NULL);
+	pthread_mutex_init(&philo_dead, NULL);
+	pthread_mutex_init(&philo_eaten, NULL);
 	data->num_of_philos = 0;
 	data->num_of_forks = 0;
 	data->time_to_die = 0;
@@ -50,7 +58,10 @@ t_philo_data	*initiate_data(void)
 	data->forks = NULL;
 	data->all_philos_have_eaten = false;
 	data->lock = lock;
-	//pthread_mutex_init(&data->print, NULL);
+	data->check_mtx = check_mtx;
+	data->helper = helper;
+	data->philo_dead = philo_dead;
+	data->philo_eaten = philo_eaten;
 	return (data);
 }
 void	initiate_philosopher(int n, t_philo *philosopher, t_philo_data *data)

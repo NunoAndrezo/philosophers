@@ -1,18 +1,15 @@
-
-
 #include "../include/philosophers.h"
 
 static void	rotina_filhote(t_philo *philosopher);
-static bool	check_all_philos_have_eaten(t_philo_data *data);
+static void	check_all_philos_have_eaten(t_philo_data *data);
 static bool check_if_philo_is_dead(t_philo *philosopher, bool with_forks);
 
 void	*routine(void *philo)
 {
 	t_philo		*philosopher;
-	pthread_mutex_t	routine_mutex;
 
 	philosopher = (t_philo *)philo;
-	// Check for NULL pointers to avoid segmentation faults
+	pthread_mutex_lock(&philosopher->data->lock);
 	if (philosopher == NULL || philosopher->data == NULL || philosopher->fork_left == NULL)
 	{
 		printf("Error: Invalid philosopher or fork pointer\n");
@@ -22,27 +19,26 @@ void	*routine(void *philo)
 		ft_usleep(10, -42);
 	while (philosopher->data->running == true && philosopher->data->philos_created == true)
 	{
-		pthread_mutex_lock(&routine_mutex);
 		if (philosopher->eat_count == philosopher->data->num_must_eat)
 		{
 			if (philosopher->reached_must_eat == false)
 				philosopher->reached_must_eat = true;
+			pthread_mutex_unlock(&philosopher->data->lock);
 			return (NULL);
 		}
 		check_all_philos_have_eaten(philosopher->data);
 		if (philosopher->data->all_philos_have_eaten == true)
 		{
-			if (philosopher->data->running == true)
-				philosopher->data->running = false;
-			pthread_mutex_unlock(&routine_mutex);
+			philosopher->data->running = false;
+			pthread_mutex_unlock(&philosopher->data->lock);
 			return (NULL);
 		}
-		pthread_mutex_unlock(&routine_mutex);
-		if (philosopher->data->reached_must_eat == false)
-			rotina_filhote(philosopher);
-		else
+		if (philosopher->data->reached_must_eat == true)
 			return (NULL);
+		pthread_mutex_unlock(&philosopher->data->lock);
+		rotina_filhote(philosopher);
 	}
+	pthread_mutex_unlock(&philosopher->data->lock);
 	return (NULL);
 }
 
@@ -50,292 +46,157 @@ static void	rotina_filhote(t_philo *philosopher)
 {
 	unsigned int	i;
 
-	while (philosopher->data->running == true)
+	pthread_mutex_lock(&philosopher->data->lock);
+	check_all_philos_have_eaten(philosopher->data);
+	if (philosopher->eat_count >= philosopher->data->num_must_eat)
+	{	
+		philosopher->reached_must_eat = true;
+		pthread_mutex_unlock(&philosopher->data->lock);
+		return ;
+	}
+	if (philosopher->data->all_philos_have_eaten == true)
 	{
-		pthread_mutex_lock(&philosopher->data->lock);
-		if (philosopher->data->num_must_eat != -42)
-		{	
-		if (philosopher->eat_count == philosopher->data->num_must_eat)
-			philosopher->reached_must_eat = true;
-		if (check_all_philos_have_eaten(philosopher->data) == true)
-		{
-			philosopher->data->all_philos_have_eaten = true;
-			pthread_mutex_unlock(&philosopher->data->lock);
-			return ;
-		}
-		}
+		philosopher->data->running = false;
 		pthread_mutex_unlock(&philosopher->data->lock);
-
-		if (philosopher->reached_must_eat == true)
-			return ;
-
-		pthread_mutex_lock(&philosopher->data->lock);
-		i = 0;
-		while (philosopher->eat_count > philosopher->data->philosophers[++i]->eat_count)
-		{
-		if (i == philosopher->data->num_of_philos)
-			i = 0;
-		}
-		pthread_mutex_unlock(&philosopher->data->lock);
-
-		if (philosopher->have_not_eaten == true)
+		return ;
+	}
+	pthread_mutex_unlock(&philosopher->data->lock);
+	pthread_mutex_lock(&philosopher->data->helper);
+	i = 0;
+	while (i < philosopher->data->num_of_philos)
+	{
+		if (philosopher->eat_count <= philosopher->data->philosophers[i]->eat_count)
+			break ;
+		i++;
+	}
+	if (philosopher->have_not_eaten == true)
 		philosopher->time_last_eat = get_time();
-		philosopher->have_not_eaten = false;
-
-		if (check_if_philo_is_dead(philosopher, false) == true)
-		{
+	philosopher->have_not_eaten = false;
+	if (philosopher->data->running == false || check_if_philo_is_dead(philosopher, false) == true)
+	{	
 		philosopher->data->running = false;
 		return ;
-		}
-
-		if (philosopher->data->running == false || philosopher->data->reached_must_eat == true || check_if_philo_is_dead(philosopher, false) == true)
+	}
+	if (philosopher->data->reached_must_eat == true)
+	{
+		pthread_mutex_unlock(&philosopher->data->helper);
 		return ;
-
-		pthread_mutex_lock(philosopher->fork_left);
-		print_state(philosopher, "has taken a fork");
-
-		if (philosopher->fork_right == NULL)
-		{
-			while (get_time() - philosopher->time_last_eat < philosopher->data->time_to_die)
-				ft_usleep(10, -42);
-			philosopher->dead = true;
-			print_state(philosopher, "died");
-			philosopher->data->running = false;
-			pthread_mutex_unlock(philosopher->fork_left);
-			return ;
-		}
-		if (pthread_mutex_trylock(philosopher->fork_right) != 0)
+	}
+	pthread_mutex_unlock(&philosopher->data->helper);
+	pthread_mutex_lock(philosopher->fork_left);
+	print_state(philosopher, "has taken a fork");
+	if (philosopher->fork_right == NULL)
+	{
+		while (get_time() - philosopher->time_last_eat < philosopher->data->time_to_die)
+			ft_usleep(10, -42);
+		philosopher->dead = true;
+		print_state(philosopher, "died");
+		philosopher->data->running = false;
+		pthread_mutex_unlock(philosopher->fork_left);
+		return ;
+	}
+	while(pthread_mutex_lock(philosopher->fork_right) != 0) //not successful
+	{
+		ft_usleep(10, -42); // Wait and retry
+		if (check_if_philo_is_dead(philosopher, false) == true)
 		{
 			pthread_mutex_unlock(philosopher->fork_left); // Release the first fork
-			ft_usleep(10, -42); // Wait and retry
-			continue;
+			return ;	
 		}
-		print_state(philosopher, "has taken a fork");
-		if (check_if_philo_is_dead(philosopher, true) == true)
-			return ;
-		print_state(philosopher, "is eating");
-		ft_usleep(philosopher->data->time_to_eat, philosopher->time_last_eat);
-		philosopher->time_last_eat = get_time();
-		pthread_mutex_unlock(philosopher->fork_left);
-		pthread_mutex_unlock(philosopher->fork_right);
-		pthread_mutex_lock(&philosopher->data->lock);
-		if (philosopher->data->num_must_eat != -42)
-		{
-			philosopher->eat_count++;
-			if (philosopher->eat_count == philosopher->data->num_must_eat)
-				philosopher->reached_must_eat = true;
-			if (check_all_philos_have_eaten(philosopher->data) == true)
-			{	
-				philosopher->data->all_philos_have_eaten = true;
-				pthread_mutex_unlock(&philosopher->data->lock);
-				return ;
-			}
-		}
-		pthread_mutex_unlock(&philosopher->data->lock);
-		if (philosopher->reached_must_eat == true)
-			return ;
-		if (philosopher->data->running == false || check_if_philo_is_dead(philosopher, false) == true || philosopher->data->reached_must_eat == true)
-			return ;
-		print_state(philosopher, "is sleeping");
-		ft_usleep(philosopher->data->time_to_sleep, -42);
-		print_state(philosopher, "is thinking");
-		if (philosopher->data->num_must_eat != -42 && philosopher->eat_count == philosopher->data->num_must_eat)
-		{
-			print_state(philosopher, "is thinking");
-			philosopher->data->reached_must_eat = true;
-			return ;
-		}
-		check_if_philo_is_dead(philosopher, false);
 	}
+	print_state(philosopher, "has taken a fork");
+	print_state(philosopher, "is eating");
+	ft_usleep(philosopher->data->time_to_eat, philosopher->time_last_eat);
+	philosopher->time_last_eat = get_time();
+	philosopher->eat_count++;
+	pthread_mutex_unlock(philosopher->fork_left);
+	pthread_mutex_unlock(philosopher->fork_right);
+	pthread_mutex_lock(&philosopher->data->lock);
+	if (philosopher->eat_count >= philosopher->data->num_must_eat)
+	{	
+		philosopher->reached_must_eat = true;
+		pthread_mutex_unlock(&philosopher->data->lock);
+		return ;
+	}
+	check_all_philos_have_eaten(philosopher->data);
+	if (philosopher->data->all_philos_have_eaten == true)
+	{	
+		pthread_mutex_unlock(&philosopher->data->lock);
+		return ;
+	}
+	if (philosopher->data->running == false || check_if_philo_is_dead(philosopher, false) == true)
+	{
+		philosopher->data->running = false;
+		pthread_mutex_unlock(&philosopher->data->lock);
+		return ;
+	}
+	pthread_mutex_unlock(&philosopher->data->lock);
+	print_state(philosopher, "is sleeping");
+	ft_usleep(philosopher->data->time_to_sleep, -42); // data race? se calhar adicionar, na philo struct um time_to_sleep
+	print_state(philosopher, "is thinking");
+	check_if_philo_is_dead(philosopher, false);
+	pthread_mutex_lock(&philosopher->data->lock);
+	if (philosopher->data->running == false || check_if_philo_is_dead(philosopher, false) == true)
+	{
+		philosopher->data->running = false;
+		pthread_mutex_unlock(&philosopher->data->lock);
+		return ;
+	}
+	if (philosopher->data->reached_must_eat == true)
+	{
+		pthread_mutex_unlock(&philosopher->data->lock);
+		return ;
+	}
+	pthread_mutex_unlock(&philosopher->data->lock);
+	return ;
 }
 
-static bool	check_all_philos_have_eaten(t_philo_data *data)
+static void	check_all_philos_have_eaten(t_philo_data *data)
 {
 	unsigned int	i;
 	bool			all_eaten;
-	pthread_mutex_t	checker;
 
-	pthread_mutex_lock(&checker);
+	pthread_mutex_lock(&data->philo_eaten);
 	i = 0;
 	all_eaten = true;
 	while (i < data->num_of_philos)
 	{
-		if (data->philosophers[i]->reached_must_eat == false)
+		if (data->philosophers[i]->eat_count < data->num_must_eat)
 		{
 			all_eaten = false;
 			break;
 		}
 		i++;
 	}
-	pthread_mutex_unlock(&checker);
-	return all_eaten;
+	data->all_philos_have_eaten = all_eaten;
+	pthread_mutex_unlock(&data->philo_eaten);
 }
 
 static bool check_if_philo_is_dead(t_philo *philosopher, bool with_forks)
 {
-    uint64_t time_since_last_meal = get_time() - philosopher->time_last_eat;
+	uint64_t time_since_last_meal;
 
-    if (time_since_last_meal > philosopher->data->time_to_die)
-    {
-        pthread_mutex_lock(&philosopher->data->lock);
-        philosopher->dead = true;
-        print_state(philosopher, "died");
-        philosopher->data->running = false;
-        pthread_mutex_unlock(&philosopher->data->lock);
-
-        if (with_forks)
-        {
-            pthread_mutex_unlock(philosopher->fork_left);
-            pthread_mutex_unlock(philosopher->fork_right);
-        }
-        return true;
-    }
-    return false;
-}
-
-/* 
-static void	rotina_filhote(t_philo *philosopher);
-static bool	check_all_philos_have_eaten(t_philo_data *data);
-static bool check_if_philo_is_dead(t_philo *philosopher, bool with_forks);
-
-void	*routine(void *philo)
-{
-	t_philo	*philosopher;
-
-	philosopher = (t_philo *)philo;
-	while (philosopher->data->running == false || philosopher->data->philos_created == false)
-		ft_usleep(10, -42);
-	while (philosopher->data->running == true && philosopher->data->philos_created == true)
+	if (!philosopher || !philosopher->data)
 	{
-		if (philosopher->data->all_philos_have_eaten == true)
-		{
-			philosopher->data->running = false;
-			return (NULL);
-		}
-		else if (philosopher->data->reached_must_eat == false)
-			rotina_filhote(philosopher);
-		else
-			return (NULL);
+		printf("Error: Invalid philosopher or data pointer\n");
+		return true;
 	}
-	return (NULL);
-}
-
-static void	rotina_filhote(t_philo *philosopher)
-{
-	unsigned int	i;
-
-	while (philosopher->data->running == true)
-	{
-		if (philosopher->data->num_must_eat != -42)
-		{	
-			if (philosopher->eat_count == philosopher->data->num_must_eat)
-				philosopher->reached_must_eat = true;
-			if (check_all_philos_have_eaten(philosopher->data) == true)
-			{
-				philosopher->data->all_philos_have_eaten = true;
-				return ;
-			}
-		}
-		if (philosopher->reached_must_eat == true)
-			return ;
-		pthread_mutex_lock(&philosopher->data->lock);
-		i = 0;
-		while (philosopher->eat_count > philosopher->data->philosophers[++i]->eat_count)
-		{
-			if (i == philosopher->data->num_of_philos)
-				i = 0;
-		}
-		pthread_mutex_unlock(&philosopher->data->lock);
-		if (philosopher->have_not_eaten == true)
-			philosopher->time_last_eat = get_time();
-		philosopher->have_not_eaten = false;
-		if (check_if_philo_is_dead(philosopher, false) == true)
-		{
-			philosopher->data->running = false;
-			return ;
-		}
-		if (philosopher->data->running == false || philosopher->data->reached_must_eat == true || check_if_philo_is_dead(philosopher, false) == true)
-			return ;
-		pthread_mutex_lock(philosopher->fork_left);
-		print_state(philosopher, "has taken a fork");
-		if (philosopher->fork_right == NULL)
-		{
-			while (get_time() - philosopher->time_last_eat < philosopher->data->time_to_die)
-				ft_usleep(10, -42);
-			philosopher->dead = true;
-			print_state(philosopher, "died");
-			philosopher->data->running = false;
-			pthread_mutex_unlock(philosopher->fork_right);
-			return ;
-		}
-		pthread_mutex_lock(philosopher->fork_right);
-		print_state(philosopher, "has taken a fork");
-		check_if_philo_is_dead(philosopher, true);
-		print_state(philosopher, "is eating");
-		ft_usleep(philosopher->data->time_to_eat, philosopher->time_last_eat);
-		philosopher->time_last_eat = get_time();
-		pthread_mutex_unlock(philosopher->fork_left);
-		pthread_mutex_unlock(philosopher->fork_right);
-		if (philosopher->data->num_must_eat != -42)
-		{
-			philosopher->eat_count++;
-			if (philosopher->eat_count == philosopher->data->num_must_eat)
-				philosopher->reached_must_eat = true;
-			if (check_all_philos_have_eaten(philosopher->data) == true)
-			{	
-				philosopher->data->all_philos_have_eaten = true;
-				return ;
-			}
-		}
-		if (philosopher->reached_must_eat == true)
-			return ;
-		if (philosopher->data->running == false || check_if_philo_is_dead(philosopher, false) == true || philosopher->data->reached_must_eat == true)
-			return ;
-		print_state(philosopher, "is sleeping");
-		ft_usleep(philosopher->data->time_to_sleep, -42);
-		print_state(philosopher, "is thinking");
-		if (philosopher->data->num_must_eat != -42
-			&& philosopher->eat_count == philosopher->data->num_must_eat)
-		{
-			print_state(philosopher, "is thinking");
-			philosopher->data->reached_must_eat = true;
-			return ;
-		}
-		check_if_philo_is_dead(philosopher, false);
-	}
-}
-
-static bool	check_all_philos_have_eaten(t_philo_data *data)
-{
-	unsigned int	i;
-
-	i = 0;
-	while (i < data->num_of_philos)
-	{
-		if (data->philosophers[i]->reached_must_eat == false)
-			return (false);
-		i++;
-	}
-	return (true);
-}
-
-static bool check_if_philo_is_dead(t_philo *philosopher, bool with_forks)
-{
-	if ((get_time() - philosopher->time_last_eat) > philosopher->data->time_to_die && with_forks == true)
+	pthread_mutex_lock(&philosopher->data->philo_dead);
+	time_since_last_meal = get_time() - philosopher->time_last_eat;
+	if (time_since_last_meal > philosopher->data->time_to_die)
 	{
 		philosopher->dead = true;
 		print_state(philosopher, "died");
 		philosopher->data->running = false;
-		pthread_mutex_unlock(philosopher->fork_left);
-		pthread_mutex_unlock(philosopher->fork_right);
-		return (true);
+		if (with_forks)
+		{
+			pthread_mutex_unlock(philosopher->fork_left);
+			if (philosopher->fork_right)
+				pthread_mutex_unlock(philosopher->fork_right);
+		}
+		pthread_mutex_unlock(&philosopher->data->philo_dead);
+		return true;
 	}
-	else if ((get_time() - philosopher->time_last_eat) > philosopher->data->time_to_die && with_forks == false)
-	{
-		philosopher->dead = true;
-		print_state(philosopher, "died");
-		philosopher->data->running = false;
-		return (true);
-	}
-	return (false);
-} */
+	pthread_mutex_unlock(&philosopher->data->philo_dead);
+	return false;
+}
