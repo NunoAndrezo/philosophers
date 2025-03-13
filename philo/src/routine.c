@@ -1,7 +1,7 @@
 #include "../include/philosophers.h"
 
 static void	rotina_filhote(t_philo *philosopher);
-static void	check_all_philos_have_eaten(t_philo_data *data);
+static bool	check_all_philos_have_eaten(t_philo_data *data);
 static bool check_if_philo_is_dead(t_philo *philosopher, bool with_forks);
 
 void	*routine(void *philo)
@@ -17,8 +17,10 @@ void	*routine(void *philo)
 	}
 	while (philosopher->data->running == false || philosopher->data->philos_created == false)
 		ft_usleep(10, -42);
+	pthread_mutex_unlock(&philosopher->data->lock);
 	while (philosopher->data->running == true && philosopher->data->philos_created == true)
 	{
+		pthread_mutex_lock(&philosopher->data->lock);
 		if (philosopher->eat_count == philosopher->data->num_must_eat)
 		{
 			if (philosopher->reached_must_eat == false)
@@ -26,7 +28,7 @@ void	*routine(void *philo)
 			pthread_mutex_unlock(&philosopher->data->lock);
 			return (NULL);
 		}
-		check_all_philos_have_eaten(philosopher->data);
+		philosopher->data->all_philos_have_eaten = check_all_philos_have_eaten(philosopher->data);
 		if (philosopher->data->all_philos_have_eaten == true)
 		{
 			philosopher->data->running = false;
@@ -38,7 +40,6 @@ void	*routine(void *philo)
 		pthread_mutex_unlock(&philosopher->data->lock);
 		rotina_filhote(philosopher);
 	}
-	pthread_mutex_unlock(&philosopher->data->lock);
 	return (NULL);
 }
 
@@ -47,7 +48,7 @@ static void	rotina_filhote(t_philo *philosopher)
 	unsigned int	i;
 
 	pthread_mutex_lock(&philosopher->data->lock);
-	check_all_philos_have_eaten(philosopher->data);
+	philosopher->data->all_philos_have_eaten = check_all_philos_have_eaten(philosopher->data);
 	if (philosopher->eat_count >= philosopher->data->num_must_eat)
 	{	
 		philosopher->reached_must_eat = true;
@@ -61,7 +62,7 @@ static void	rotina_filhote(t_philo *philosopher)
 		return ;
 	}
 	pthread_mutex_unlock(&philosopher->data->lock);
-	pthread_mutex_lock(&philosopher->data->helper);
+	pthread_mutex_lock(&philosopher->data->lock);
 	i = 0;
 	while (i < philosopher->data->num_of_philos)
 	{
@@ -72,17 +73,20 @@ static void	rotina_filhote(t_philo *philosopher)
 	if (philosopher->have_not_eaten == true)
 		philosopher->time_last_eat = get_time();
 	philosopher->have_not_eaten = false;
+	pthread_mutex_unlock(&philosopher->data->lock);
+	pthread_mutex_lock(&philosopher->data->lock);
 	if (philosopher->data->running == false || check_if_philo_is_dead(philosopher, false) == true)
 	{	
 		philosopher->data->running = false;
+		pthread_mutex_unlock(&philosopher->data->lock);
 		return ;
 	}
 	if (philosopher->data->reached_must_eat == true)
 	{
-		pthread_mutex_unlock(&philosopher->data->helper);
+		pthread_mutex_unlock(&philosopher->data->lock);
 		return ;
 	}
-	pthread_mutex_unlock(&philosopher->data->helper);
+	pthread_mutex_unlock(&philosopher->data->lock);
 	pthread_mutex_lock(philosopher->fork_left);
 	print_state(philosopher, "has taken a fork");
 	if (philosopher->fork_right == NULL)
@@ -95,9 +99,14 @@ static void	rotina_filhote(t_philo *philosopher)
 		pthread_mutex_unlock(philosopher->fork_left);
 		return ;
 	}
-	while(pthread_mutex_lock(philosopher->fork_right) != 0) //not successful
+	if(pthread_mutex_lock(philosopher->fork_right) != 0) //not successful tentar while
 	{
 		ft_usleep(10, -42); // Wait and retry
+		if (pthread_mutex_lock(philosopher->fork_right) != 0)
+		{
+			pthread_mutex_unlock(philosopher->fork_left); // Release the first fork
+			return ;
+		}
 		if (check_if_philo_is_dead(philosopher, false) == true)
 		{
 			pthread_mutex_unlock(philosopher->fork_left); // Release the first fork
@@ -108,7 +117,9 @@ static void	rotina_filhote(t_philo *philosopher)
 	print_state(philosopher, "is eating");
 	ft_usleep(philosopher->data->time_to_eat, philosopher->time_last_eat);
 	philosopher->time_last_eat = get_time();
+	pthread_mutex_lock(&philosopher->data->lock);
 	philosopher->eat_count++;
+	pthread_mutex_unlock(&philosopher->data->lock);
 	pthread_mutex_unlock(philosopher->fork_left);
 	pthread_mutex_unlock(philosopher->fork_right);
 	pthread_mutex_lock(&philosopher->data->lock);
@@ -118,9 +129,10 @@ static void	rotina_filhote(t_philo *philosopher)
 		pthread_mutex_unlock(&philosopher->data->lock);
 		return ;
 	}
-	check_all_philos_have_eaten(philosopher->data);
+	philosopher->data->all_philos_have_eaten = check_all_philos_have_eaten(philosopher->data);
 	if (philosopher->data->all_philos_have_eaten == true)
-	{	
+	{
+		philosopher->data->running = false;
 		pthread_mutex_unlock(&philosopher->data->lock);
 		return ;
 	}
@@ -151,7 +163,7 @@ static void	rotina_filhote(t_philo *philosopher)
 	return ;
 }
 
-static void	check_all_philos_have_eaten(t_philo_data *data)
+static bool	check_all_philos_have_eaten(t_philo_data *data)
 {
 	unsigned int	i;
 	bool			all_eaten;
@@ -168,8 +180,8 @@ static void	check_all_philos_have_eaten(t_philo_data *data)
 		}
 		i++;
 	}
-	data->all_philos_have_eaten = all_eaten;
 	pthread_mutex_unlock(&data->philo_eaten);
+	return (all_eaten);
 }
 
 static bool check_if_philo_is_dead(t_philo *philosopher, bool with_forks)

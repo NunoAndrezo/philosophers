@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:46:39 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/03/02 01:29:48 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/13 11:02:40 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,20 @@ static void	initiating_forks(t_philo_data *data)
 	i = 0;
 	while (i < data->num_of_philos)
 	{
-		if (data->philosophers[i]->id == data->num_of_philos)
+		if (data->num_of_philos == 2)
+		{
+			if (data->philosophers[i]->id == 1) 
+			{
+				data->philosophers[i]->fork_left = data->forks[0];
+				data->philosophers[i]->fork_right = data->forks[1];
+			}
+			else
+			{
+				data->philosophers[i]->fork_left = data->forks[1];
+				data->philosophers[i]->fork_right = data->forks[0];
+			}
+		}
+		else if (data->philosophers[i]->id == data->num_of_philos)
 		{
 			data->philosophers[i]->fork_left = data->forks[0];
 			data->philosophers[i]->fork_right = data->forks[data->philosophers[i]->id - 1];
