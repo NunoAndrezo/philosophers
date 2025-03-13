@@ -3,6 +3,7 @@
 static void	rotina_filhote(t_philo *philosopher);
 static bool	check_all_philos_have_eaten(t_philo_data *data);
 static bool check_if_philo_is_dead(t_philo *philosopher, bool with_forks);
+static void ft_changer(pthread_mutex_t ola, bool *runing, bool check);
 
 void	*routine(void *philo)
 {
@@ -61,8 +62,6 @@ static void	rotina_filhote(t_philo *philosopher)
 		pthread_mutex_unlock(&philosopher->data->lock);
 		return ;
 	}
-	pthread_mutex_unlock(&philosopher->data->lock);
-	pthread_mutex_lock(&philosopher->data->lock);
 	i = 0;
 	while (i < philosopher->data->num_of_philos)
 	{
@@ -77,7 +76,7 @@ static void	rotina_filhote(t_philo *philosopher)
 	pthread_mutex_lock(&philosopher->data->lock);
 	if (philosopher->data->running == false || check_if_philo_is_dead(philosopher, false) == true)
 	{	
-		philosopher->data->running = false;
+		ft_changer(philosopher->data->lock, &philosopher->data->running, false);
 		pthread_mutex_unlock(&philosopher->data->lock);
 		return ;
 	}
@@ -212,3 +211,12 @@ static bool check_if_philo_is_dead(t_philo *philosopher, bool with_forks)
 	pthread_mutex_unlock(&philosopher->data->philo_dead);
 	return false;
 }
+
+static void ft_changer(pthread_mutex_t ola, bool *runing, bool check)
+{
+	pthread_mutex_lock(&ola);
+	*runing = check;
+	pthread_mutex_unlock(&ola);
+}
+
+//static void ft_checker(pthread_mutex_t ola, bool *runing, bool check)
