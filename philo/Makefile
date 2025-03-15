@@ -10,7 +10,7 @@ OBJ_DIR		= obj
 
 # Compiler and CFlags
 CC					= cc
-CFLAGS				= -Wall -Werror -Wextra -g -O3 -pthread
+CFLAGS				= -Wall -Werror -Wextra -g -O3 -pthread -lpthread
 
 rm					= rm -f
 
