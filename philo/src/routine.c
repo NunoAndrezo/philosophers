@@ -11,7 +11,18 @@ void	*routine(void *philo)
 	ft_checker(&philosopher->data->lock, &philosopher->data->running, false);
 	while (1)
 	{
-		
+		ft_checker(&philosopher->data->lock, &philosopher->data->running, true);
+		if (philosopher->data->running == false)
+		{
+			ft_checker(&philosopher->data->lock, &philosopher->data->running, false);
+			return (NULL);
+		}
+		if (philosopher->eat_count == philosopher->data->num_must_eat)
+		{
+			
+			ft_checker(&philosopher->data->lock, &philosopher->data->running, false);
+			return (NULL);
+		}
 	}
 }
 static void ft_checker(pthread_mutex_t *mutex, bool *variable, bool lock)
@@ -22,7 +33,7 @@ static void ft_checker(pthread_mutex_t *mutex, bool *variable, bool lock)
 		pthread_mutex_unlock(mutex);
 }
 
-static void ft_change_bool(pthread_mutex_t *mutex, bool *variable, bool check)
+static void ft_changer_bool(pthread_mutex_t *mutex, bool *variable, bool check)
 {
 	pthread_mutex_lock(mutex);
 	*variable = check;
