@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:36:29 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/13 11:02:51 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/16 01:51:57 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ t_philo_data	*initiate_data(void)
 	data->time_to_sleep = 0;
 	data->num_must_eat = 0;
 	data->start_time = 0;
-	data->philos_created = false;
-	data->reached_must_eat = false;
 	data->running = false;
 	data->forks = NULL;
 	data->all_philos_have_eaten = false;
@@ -74,5 +72,4 @@ void	initiate_philosopher(int n, t_philo *philosopher, t_philo_data *data)
 	philosopher->fork_left = NULL;
 	philosopher->fork_right = NULL;
 	philosopher->have_not_eaten = true;
-	philosopher->reached_must_eat = false;
 }

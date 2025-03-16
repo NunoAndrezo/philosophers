@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:27:49 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/13 18:53:59 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/03/16 02:06:18 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ int	main(int arc, char **arv)
 
 	if ( arc == 5 || arc == 6)
 	{
-		if (is_args_good(arv, arc) == 0)
+		if (is_args_good(arv, arc) == false)
 		{
 			write(2, "Error: Arguments are wrong\n", 27); //exemplo maximo numero de 200 philos
-			exit (EXIT_FAILURE);
+			exit (EXIT_FAILURE); // can i use exit(); ??
 		}
 		data = initiate_data();
 		get_arg(data, arc, arv);
@@ -33,7 +33,7 @@ int	main(int arc, char **arv)
 	}
 	else
 	{
-		printf("Error: Wrong number of arguments\n");
+		error_and_exit("Invalid number of arguments"GREEN"Correct is ex: ./philo 5 800 200 200 [5]\n"RESET);
 		return (1);
 	}
 	return (0);

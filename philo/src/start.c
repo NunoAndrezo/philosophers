@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:46:39 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/03/13 11:02:40 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/16 02:07:28 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static void	join_threads(t_philo_data *data)
 	unsigned int	i;
 	
 	i = 0;
-	if (data->philos_created == 1 && data->running == 1)
+	if (data->running == true)
 	{
 		while (i < data->num_of_philos)
 		{

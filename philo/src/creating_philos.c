@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 19:22:19 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/22 21:43:11 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/16 01:52:23 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	creating_philos(t_philo_data *data)
 		data->philosophers[i] = philo;
 		i++;
 	}
-	data->philos_created = true;
 }
 
 static t_philo	*creation(unsigned int n, t_philo_data *data)

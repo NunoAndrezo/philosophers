@@ -1,9 +1,37 @@
 #include "../include/philosophers.h"
 
-static void	rotina_filhote(t_philo *philosopher);
+void	*routine(void *philo)
+{
+	t_philo	*philosopher;
+
+	philosopher = (t_philo *)philo;
+	ft_checker(&philosopher->data->lock, &philosopher->data->running, true);
+	while (philosopher->data->running == false)
+		ft_usleep(10, -42);
+	ft_checker(&philosopher->data->lock, &philosopher->data->running, false);
+	while (1)
+	{
+		
+	}
+}
+static void ft_checker(pthread_mutex_t *mutex, bool *variable, bool lock)
+{
+	if (lock == true)
+		pthread_mutex_lock(mutex);
+	if (lock == false)
+		pthread_mutex_unlock(mutex);
+}
+
+static void ft_change_bool(pthread_mutex_t *mutex, bool *variable, bool check)
+{
+	pthread_mutex_lock(mutex);
+	*variable = check;
+	pthread_mutex_unlock(mutex);
+}
+
+/* static void	rotina_filhote(t_philo *philosopher);
 static bool	check_all_philos_have_eaten(t_philo_data *data);
 static bool check_if_philo_is_dead(t_philo *philosopher, bool with_forks);
-//static void ft_changer(pthread_mutex_t ola, bool *runing, bool check);
 
 void	*routine(void *philo)
 {
@@ -11,6 +39,7 @@ void	*routine(void *philo)
 
 	philosopher = (t_philo *)philo;
 	pthread_mutex_lock(&philosopher->data->lock);
+	printf("Philosopher %d created\n", philosopher->id);
 	if (philosopher == NULL || philosopher->data == NULL || philosopher->fork_left == NULL)
 	{
 		printf("Error: Invalid philosopher or fork pointer\n");
@@ -153,7 +182,9 @@ static void	rotina_filhote(t_philo *philosopher)
 	pthread_mutex_lock(&philosopher->data->lock);
 	if (philosopher->data->running == false || check_if_philo_is_dead(philosopher, false) == true)
 	{
+		//pthread_mutex_lock(&philosopher->data->helper);
 		philosopher->data->running = false;
+		//pthread_mutex_unlock(&philosopher->data->helper);
 		pthread_mutex_unlock(&philosopher->data->lock);
 		return ;
 	}
@@ -214,13 +245,5 @@ static bool check_if_philo_is_dead(t_philo *philosopher, bool with_forks)
 	}
 	pthread_mutex_unlock(&philosopher->data->philo_dead);
 	return false;
-}
-
-/* static void ft_changer(pthread_mutex_t ola, bool *runing, bool check)
-{
-	pthread_mutex_lock(&ola);
-	*runing = check;
-	pthread_mutex_unlock(&ola);
 } */
 
-//static void ft_checker(pthread_mutex_t ola, bool *runing, bool check)
