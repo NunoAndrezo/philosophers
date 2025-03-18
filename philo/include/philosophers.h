@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/16 02:06:38 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/18 21:19:53 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,57 +41,58 @@
 #define CYAN    "\x1b[1;36m"
 #define WHITE   "\x1b[1;37m"
 
-typedef struct	s_philo_data t_philo_data;
+typedef struct	s_table t_table;
 typedef pthread_mutex_t t_mutex;
 
 typedef struct	s_fork
 {
 	long		fork_id;
-	t_mutex	fork;
+	t_mutex		fork;
 }		t_fork;
 
 typedef struct	s_philo
 {
-	unsigned int		id;
-	int				eat_count;
-	bool				have_not_eaten;
-	bool				dead;
-	uint64_t			time_last_eat; //usigned long long
-	pthread_t			philo_thread;
+	long			id;
+	long			eat_count;
+	bool			have_not_eaten;
+	bool			dead;
+	long			time_last_eat; //usigned long long
+	pthread_t		philo_thread;
 	t_fork			*fork_left;
 	t_fork			*fork_right;
-	t_philo_data		*data;
+	t_table			*table;
 }		t_philo;
 
-struct	s_philo_data
+struct	s_table
 {
-	unsigned int	num_of_philos;
-	unsigned int	num_of_forks;
-	uint64_t		time_to_die;
-	uint64_t		time_to_eat;
-	uint64_t		time_to_sleep;
-	int			num_must_eat;
-	uint64_t		start_time;
-	bool			running;
-	bool			all_philos_have_eaten;
-
-	t_philo		**philosophers;
-	t_mutex		**forks;
-	t_mutex		*print_state;
-	t_mutex		lock;
-	t_mutex		check_mtx;
-	t_mutex		helper;
-	t_mutex		philo_eaten;
-	t_mutex		philo_dead;
+	long	num_of_philos;
+	long	num_of_forks;
+	long	time_to_die;
+	long	time_to_eat;
+	long	time_to_sleep;
+	long	nr_of_meals_to_eat;
+	
+	long	start_time;
+	bool	running; // false if a philo dies or all philos are full
+	bool	all_philos_full;
+	
+	t_philo	**philosophers;
+	t_mutex	**forks;
+	t_mutex	*print_state;
+	t_mutex	lock;
+	t_mutex	check_mtx;
+	t_mutex	helper;
+	t_mutex	philo_eaten;
+	t_mutex	philo_dead;
 };
 
 //main.c
 //int	main(int arc, char **arv);
 
 //initiate.c
-void			get_arg(t_philo_data *data, int arc, char **arv);
-t_philo_data	*initiate_data(void);
-void		initiate_philosopher(int n, t_philo *philosopher, t_philo_data *data);
+void		get_arg(t_table *table, int arc, char **arv);
+t_table		*initiate_data(void);
+void		initiate_philosopher(int n, t_philo *philosopher, t_table *table);
 
 // time.c
 uint64_t		get_time_micro(void);
@@ -99,21 +100,21 @@ uint64_t		get_time(void);
 bool			ft_usleep(unsigned long long micro_sec, uint64_t flag);
 
 // creating_philos.c
-void	creating_philos(t_philo_data *data);
+void	creating_philos(t_table *table);
 
 //routine.c
 void	*routine(void *philo);
 
 //mutexes.c
-void	create_forks_mutex(t_philo_data *data);
-void	destroy_forks(t_philo_data *data);
-void	create_print_mutex(t_philo_data *data);
+void	create_forks_mutex(t_table *table);
+void	destroy_forks(t_table *table);
+void	create_print_mutex(t_table *table);
 void	print_state(t_philo *philo, char *str);
 
 //start.c
-void	start(t_philo_data *data);
+void	start(t_table *table);
 
 //utils.c
 void	error_and_exit(const char *str);
 
-#endif
+#endif with big ass
