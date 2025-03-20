@@ -12,14 +12,8 @@ void	*routine(void *philo)
 	while (1)
 	{
 		ft_checker(&philosopher->data->lock, &philosopher->data->running, true);
-		if (philosopher->data->running == false)
+		if (philosopher->data->running == false || philosopher->eat_count == philosopher->data->num_must_eat)
 		{
-			ft_checker(&philosopher->data->lock, &philosopher->data->running, false);
-			return (NULL);
-		}
-		if (philosopher->eat_count == philosopher->data->num_must_eat)
-		{
-			
 			ft_checker(&philosopher->data->lock, &philosopher->data->running, false);
 			return (NULL);
 		}

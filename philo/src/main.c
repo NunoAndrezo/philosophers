@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:27:49 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/16 02:06:18 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/19 23:58:33 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,20 @@ static bool	is_args_good(char **arv, int arc);
 
 int	main(int arc, char **arv)
 {
-	t_philo_data	*data;
+	t_table	*table;
 
 	if ( arc == 5 || arc == 6)
 	{
 		if (is_args_good(arv, arc) == false)
-		{
-			write(2, "Error: Arguments are wrong\n", 27); //exemplo maximo numero de 200 philos
-			exit (EXIT_FAILURE); // can i use exit(); ??
-		}
-		data = initiate_data();
-		get_arg(data, arc, arv);
-		creating_philos(data);
-		start(data);
-		destroy_forks(data);
+			error_and_exit("Error: Arguments are wrong\n");
+		table = initiate_table();
+		get_arg(table, arc, arv);
+		creating_philos(table);
+		start(table);
+		// clean_everything() // destroy_forks(table); etcS
 	}
 	else
-	{
-		error_and_exit("Invalid number of arguments"GREEN"Correct is ex: ./philo 5 800 200 200 [5]\n"RESET);
-		return (1);
-	}
+		error_and_exit(RED"Invalid number of arguments"RESET GREEN"Correct is ex: ./philo 5 800 200 200 [5]\n"RESET);
 	return (0);
 }
 

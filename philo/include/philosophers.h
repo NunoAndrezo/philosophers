@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/18 21:19:53 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/03/20 00:01:39 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,10 @@ struct	s_table
 	long	time_to_die;
 	long	time_to_eat;
 	long	time_to_sleep;
-	long	nr_of_meals_to_eat;
+	long	nr_meals_limit;
 	
 	long	start_time;
 	bool	running; // false if a philo dies or all philos are full
-	bool	all_philos_full;
-	
 	t_philo	**philosophers;
 	t_mutex	**forks;
 	t_mutex	*print_state;
@@ -91,7 +89,7 @@ struct	s_table
 
 //initiate.c
 void		get_arg(t_table *table, int arc, char **arv);
-t_table		*initiate_data(void);
+t_table	*initiate_table(void);
 void		initiate_philosopher(int n, t_philo *philosopher, t_table *table);
 
 // time.c
