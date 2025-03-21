@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 01:55:18 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/20 00:22:21 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/20 19:20:23 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,3 +51,9 @@ long	ft_atol(char *s)
 	}
 	return (res * signal);
 }
+
+/* adicionar ao makefile a de cima.
+
+adicionar ao libft:
+
+ft_matrix_len(); */

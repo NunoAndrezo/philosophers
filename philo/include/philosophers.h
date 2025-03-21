@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/20 00:01:39 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/20 21:26:53 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # include <limits.h>
 # include "../libft/libft.h"
 # include "../printf/ft_printf.h"
+# include <errno.h>
 
 #define RESET   "\x1b[0m"
 #define BLACK   "\x1b[1;30m"
@@ -43,23 +44,34 @@
 
 typedef struct	s_table t_table;
 typedef pthread_mutex_t t_mutex;
+typedef enum	e_mutex_code
+{
+	INIT,
+	LOCK,
+	UNLOCK,
+	CREATE,
+	DESTROY,
+	JOIN,
+	DETACH,
+
+} t_mutex_code;
 
 typedef struct	s_fork
 {
-	long		fork_id;
-	t_mutex		fork;
+	long		id;
+	t_mutex	fork;
 }		t_fork;
 
 typedef struct	s_philo
 {
 	long			id;
 	long			eat_count;
-	bool			have_not_eaten;
+	bool			full;
 	bool			dead;
 	long			time_last_eat; //usigned long long
 	pthread_t		philo_thread;
-	t_fork			*fork_left;
-	t_fork			*fork_right;
+	t_fork			*first_fork;
+	t_fork			*second_fork;
 	t_table			*table;
 }		t_philo;
 
@@ -74,14 +86,9 @@ struct	s_table
 	
 	long	start_time;
 	bool	running; // false if a philo dies or all philos are full
-	t_philo	**philosophers;
-	t_mutex	**forks;
+	t_philo	*philosophers;
+	t_fork	*forks;
 	t_mutex	*print_state;
-	t_mutex	lock;
-	t_mutex	check_mtx;
-	t_mutex	helper;
-	t_mutex	philo_eaten;
-	t_mutex	philo_dead;
 };
 
 //main.c
@@ -97,17 +104,15 @@ uint64_t		get_time_micro(void);
 uint64_t		get_time(void);
 bool			ft_usleep(unsigned long long micro_sec, uint64_t flag);
 
-// creating_philos.c
-void	creating_philos(t_table *table);
-
 //routine.c
 void	*routine(void *philo);
 
 //mutexes.c
-void	create_forks_mutex(t_table *table);
-void	destroy_forks(t_table *table);
-void	create_print_mutex(t_table *table);
+void	mutex_handle(t_mutex *mutex, t_mutex_code code);
 void	print_state(t_philo *philo, char *str);
+
+//threads.c
+void	thread_handle(pthread_t *thread, void *(*routine)(void *), void *table, t_mutex_code code);
 
 //start.c
 void	start(t_table *table);

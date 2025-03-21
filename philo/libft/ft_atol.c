@@ -6,12 +6,11 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 00:14:57 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/20 00:20:03 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/20 19:20:39 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "../include/philosophers.h"
 
 long	ft_atol(char *s)
 {
@@ -39,13 +38,9 @@ long	ft_atol(char *s)
 			res = s[i] - '0';
 		}
 		else
-			error_and_exit(RED"ERROR: Invalid Arguments"RESET);
+			exit(1);
 		i++;	
 	}
 	return (res * signal);
 }
-adicionar ao makefile a de cima.
 
-adicionar ao libft:
-
-ft_matrix_len();
