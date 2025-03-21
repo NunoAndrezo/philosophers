@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/20 21:26:53 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/21 15:43:21 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,14 @@
 
 typedef struct	s_table t_table;
 typedef pthread_mutex_t t_mutex;
+
+typedef enum	e_time_code
+{
+	SECONDS,
+	MILLISECONDS,
+	MICROSECONDS,
+}			t_time_code;
+
 typedef enum	e_mutex_code
 {
 	INIT,
@@ -86,9 +94,11 @@ struct	s_table
 	
 	long	start_time;
 	bool	running; // false if a philo dies or all philos are full
+	bool	philos_are_ready;
 	t_philo	*philosophers;
 	t_fork	*forks;
-	t_mutex	*print_state;
+	t_mutex	print_state;
+	t_mutex	table_mutex; // avoid data races while reading from table
 };
 
 //main.c
@@ -96,8 +106,17 @@ struct	s_table
 
 //initiate.c
 void		get_arg(t_table *table, int arc, char **arv);
-t_table	*initiate_table(void);
-void		initiate_philosopher(int n, t_philo *philosopher, t_table *table);
+void		initiate(t_table *table);
+
+//checkers_and_changers.c
+void	change_bool(t_mutex *mutex, bool *var, bool value);
+bool	check_bool(t_mutex *mutex, bool *var);
+void	change_long(t_mutex *mutex, long *var, long value);
+bool	check_long(t_mutex *mutex, long *var);
+bool	simulation_is_running(t_table *table);
+
+//syncronization.c
+void	wait_all_threads(t_table *table);
 
 // time.c
 uint64_t		get_time_micro(void);

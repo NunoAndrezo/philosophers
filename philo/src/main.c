@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:27:49 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/20 19:30:56 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/21 15:15:27 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,8 @@ int	main(int arc, char **arv)
 	{
 		if (is_args_good(arv, arc) == false)
 			error_and_exit("Error: Arguments are wrong\n");
-		initiate_table(&table);
 		get_arg(&table, arc, arv);
-		creating_philos(&table);
+		initiate(&table);
 		start(&table);
 		// clean_everything() // destroy_forks(&table); etcS
 	}

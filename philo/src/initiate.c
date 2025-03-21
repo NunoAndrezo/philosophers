@@ -6,13 +6,14 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:36:29 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/20 21:23:53 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/21 15:27:50 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
 static void	initiate_philosopher(t_table *table);
+static void assign_forks(t_philo *philo, t_fork *forks, long philo_index);
 
 void	get_arg(t_table *table, int arc, char **arv)
 {
@@ -31,19 +32,22 @@ void	get_arg(t_table *table, int arc, char **arv)
 		table->nr_meals_limit = -1;
 }
 
-void	initiate_table(t_table	*table)
+void	initiate(t_table	*table)
 {
 	long	i;
 
 	i = -1;
+	table->start_time = 0;
+	table->philos_are_ready = false;
+	table->running = false;
+	mutex_handle(&table->print_state, INIT);
+	mutex_handle(&table->table_mutex, INIT);
 	table->philosophers = (t_philo *)malloc(sizeof(t_philo) * table->num_of_philos);
 	if (!table->philosophers)
 		error_and_exit(RED"Error: Malloc failed"RESET);
 	table->forks = (t_fork *)malloc(sizeof(t_fork) * table->num_of_forks);
 	if (!table->forks)
 		error_and_exit(RED"Error: Malloc failed"RESET);
-	table->start_time = 0;
-	table->running = false;
 	while (++i < table->num_of_philos)
 	{
 		mutex_handle(&table->forks[i].fork, INIT);
@@ -60,7 +64,7 @@ static void	initiate_philosopher(t_table *table)
 	i = -1;
 	while (++i < table->num_of_philos)
 	{
-		philo = table->philosophers + i;
+		*philo = table->philosophers[i]; // if doesnt work, try philo = table->philosophers + i;
 		philo->id = i + 1;
 		philo->full = false;
 		philo->eat_count = 0;
@@ -71,16 +75,16 @@ static void	initiate_philosopher(t_table *table)
 	
 }
 
-static void assign_forks(t_philo *philo, t_fork *forks, long philo_pos)
+static void assign_forks(t_philo *philo, t_fork *forks, long philo_index)
 {
 	long	philo_nbr;
 
 	philo_nbr = philo->table->num_of_philos;
-	philo->first_fork = &forks[(philo_pos + 1) % philo_nbr];
-	philo->second_fork = &forks[philo_pos];
+	philo->first_fork = &forks[(philo_index + 1) % philo_nbr]; // 1+1 / 10 = 0,2 o resto e 2. // 3 + 1 / 10 = 0,4 o resto e 4 // 5 + 1 / 10 = 0,6 o resto e 6 // 7 + 1 / 10 = 0,8 o resto e 8 // 9 + 1 / 10 = 0,10 o resto e 0
+	philo->second_fork = &forks[philo_index];
 	if (philo->id % 2 == 0)
 	{
-		philo->first_fork = &forks[philo_pos];
-		philo->second_fork = &forks[(philo_pos + 1) % philo_nbr];
+		philo->first_fork = &forks[philo_index];
+		philo->second_fork = &forks[(philo_index + 1) % philo_nbr]; // 2 + 1 / 10 = 0,3 o resto e 3 // 4 + 1 / 10 = 0,5 o resto e 5 // 6 + 1 / 10 = 0,7 o resto e 7 // 8 + 1 / 10 = 0,9 o resto e 9 // 10 + 1 / 10 = 0,11 o resto e 1
 	}
 }

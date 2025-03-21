@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:48:00 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/03/20 21:00:23 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/21 15:26:29 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	mutex_handle(t_mutex *mutex, t_mutex_code code)
 
 void	print_state(t_philo *philo, char *str)
 {
-	pthread_mutex_lock(philo->table->print_state);
+	pthread_mutex_lock(&philo->table->print_state);
 	printf("%lu %d %s\n", get_time() - philo->table->start_time, philo->id, str);
-	pthread_mutex_unlock(philo->table->print_state);
+	pthread_mutex_unlock(&philo->table->print_state);
 }

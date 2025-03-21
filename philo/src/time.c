@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:26:57 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/02/27 19:37:31 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/21 16:31:47 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ uint64_t	get_time_micro(void)
 
 uint64_t	get_time(void)
 {
+	
 	return (get_time_micro() / 1000);
 }
 
