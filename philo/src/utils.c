@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 01:55:18 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/20 19:20:23 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/28 21:45:12 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,15 @@ void	error_and_exit(const char *str)
 
 long	ft_atol(char *s)
 {
-	int	len;
 	long	signal;
 	long	res;
 	long	i;
 
 	if (!s || !s[0])
 		return (0);
-	len = ft_len(s);
 	signal = 1;
 	res = 0;
+	i = 0;
 	while (s[i] == ' ')
 		i++;
 	if (s[i] == '-' || s[i] == '+')

@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:26:57 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/03/28 14:55:51 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/28 21:24:17 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ uint64_t	get_time(t_time_code time_code)
 		error_and_exit("gettimeofday failed\n");
 	if (SECONDS == time_code)
 		return (time.tv_sec + (time.tv_usec / 1000000));
-	else if (MILLISECONDS == time_code)
+	else if (MILISECONDS == time_code)
 		return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 	else if (MICROSECONDS == time_code)
 		return ((time.tv_sec * 1000000) + time.tv_usec);

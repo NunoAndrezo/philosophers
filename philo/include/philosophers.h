@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/28 19:58:56 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/28 21:25:24 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,11 @@ typedef pthread_mutex_t t_mutex;
 
 typedef enum	e_print_status
 {
-	LEFT_FORK,
-	RIGHT_FORK,
-	EAT,
-	SLEEP,
+	FIRST_FORK,
+	SECOND_FORK,
+	EATING,
+	SLEEPING,
+	THINKING,
 	DEAD,
 	
 }	t_print_status;
@@ -58,7 +59,7 @@ typedef enum	e_print_status
 typedef enum	e_time_code
 {
 	SECONDS,
-	MILLISECONDS,
+	MILISECONDS,
 	MICROSECONDS,
 }			t_time_code;
 
@@ -91,6 +92,7 @@ typedef struct	s_philo
 	t_fork			*first_fork;
 	t_fork			*second_fork;
 	t_table			*table;
+	t_mutex		philo_mutex; // to comunicate with thread monitor
 }		t_philo;
 
 struct	s_table
@@ -107,6 +109,7 @@ struct	s_table
 	bool	philos_are_ready;
 	t_philo	*philosophers;
 	t_fork	*forks;
+	t_mutex	checker;
 	t_mutex	print_mutex;
 	t_mutex	table_mutex; // avoid data races while reading from table
 };
@@ -137,7 +140,7 @@ void	*routine(void *philo);
 
 //mutexes.c
 void	mutex_handle(t_mutex *mutex, t_mutex_code code);
-void	print_state(t_philo *philo, char *str);
+void	print_mutex(t_philo *philo, t_print_status status);
 
 //threads.c
 void	thread_handle(pthread_t *thread, void *(*routine)(void *), void *table, t_mutex_code code);
@@ -147,5 +150,7 @@ void	start(t_table *table);
 
 //utils.c
 void	error_and_exit(const char *str);
+long	ft_atol(char *s);
 
-#endif with big ass
+
+#endif

@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:27:49 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/21 15:15:27 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/28 21:28:24 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static bool	check_len(char *s)
 {
 	int	i;
 
-	i = ft_len(s);
+	i = ft_strlen(s);
 	if (i > 10)
 		return (false);
 	return (true);

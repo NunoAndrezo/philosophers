@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:36:29 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/21 15:27:50 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/28 21:27:31 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,9 @@ void	initiate(t_table	*table)
 	table->start_time = 0;
 	table->philos_are_ready = false;
 	table->running = false;
-	mutex_handle(&table->print_state, INIT);
+	mutex_handle(&table->print_mutex, INIT);
 	mutex_handle(&table->table_mutex, INIT);
+	mutex_handle(&table->checker, INIT);
 	table->philosophers = (t_philo *)malloc(sizeof(t_philo) * table->num_of_philos);
 	if (!table->philosophers)
 		error_and_exit(RED"Error: Malloc failed"RESET);
@@ -64,12 +65,13 @@ static void	initiate_philosopher(t_table *table)
 	i = -1;
 	while (++i < table->num_of_philos)
 	{
-		*philo = table->philosophers[i]; // if doesnt work, try philo = table->philosophers + i;
+		philo = table->philosophers + i; // if doesnt work, try philo = table->philosophers + i;
 		philo->id = i + 1;
 		philo->full = false;
 		philo->eat_count = 0;
 		philo->table = table;
 		philo->time_last_eat = 0;
+		mutex_handle(&philo->philo_mutex, INIT);
 		assign_forks(philo, table->forks, i);
 	}
 	

@@ -6,13 +6,13 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:48:00 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/03/28 20:03:18 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/28 21:37:21 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-static void	handle_mutex_return(int	ret_val, t_mutex_code code)
+/* static void	handle_mutex_return(int	ret_val, t_mutex_code code)
 {
 	if (ret_val == 0)
 		return ;
@@ -29,7 +29,7 @@ static void	handle_mutex_return(int	ret_val, t_mutex_code code)
 	else if (EBUSY == ret_val)
 		error_and_exit(RED"The mutex is already locked"RESET);
 	
-}
+} */
 
 void	mutex_handle(t_mutex *mutex, t_mutex_code code)
 {
@@ -45,12 +45,23 @@ void	mutex_handle(t_mutex *mutex, t_mutex_code code)
 		error_and_exit(RED"Wrong mutex code"RESET);
 }
 
-void	print_mutex(t_philo *philo, char *str)
+void	print_mutex(t_philo *philo, t_print_status status)
 {
 	uint64_t print_time;
 
+	if (philo->full) // thread safe?
+		return ;
 	pthread_mutex_lock(&philo->table->print_mutex);
-	print_time = get_time(MICROSECONDS) - philo->table->start_time;
-	printf("%lu %d %s\n", print_time, philo->id, str);
+	print_time = get_time(MILISECONDS) - philo->table->start_time;
+	if ((FIRST_FORK == status|| SECOND_FORK == status) && simulation_is_running(philo->table) == true)
+			printf(BLUE"%ld"RESET"%ld has taken a fork\n", print_time, philo->id);
+	else if (status == EATING && simulation_is_running(philo->table) == 1)
+			printf(YELLOW"%ld"RESET"%ld is eating\n", print_time, philo->id);
+	else if (status == SLEEPING && simulation_is_running(philo->table))
+			printf(MAGENTA"%ld"RESET"%ld is sleeping\n", print_time, philo->id);
+	else if (status == THINKING && simulation_is_running(philo->table) == 1)
+			printf(CYAN"%ld"RESET"%ld is thinking\n", print_time, philo->id);
+	else if (status == DEAD)
+			printf(RED"%ld"RESET"%ld died\n", print_time, philo->id);
 	pthread_mutex_unlock(&philo->table->print_mutex);
 }

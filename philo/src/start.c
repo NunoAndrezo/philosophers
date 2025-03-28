@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:46:39 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/03/28 14:34:29 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/28 21:24:24 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	start(t_table *table)
 				&table->philosophers[i], CREATE);
 	}
 	// getting the time when simulation starts
-	table->start_time = get_time(MILLISECONDS);
+	table->start_time = get_time(MILISECONDS);
 	// changed the bool of philos_are_ready to true
 	change_bool(&table->table_mutex, &table->philos_are_ready, true);
 	// wait for every philos to be ready, when they are, we are ready to join
