@@ -4,10 +4,23 @@ static void wait_for_all_philos(t_table *table);
 
 void	*routine(void *table)
 {
-	t_philo	*philosopher;
+	t_philo	*philo;
 
-	philosopher = (t_philo *)table;
-	wait_for_all_philos(philosopher->table);
+	philo = (t_philo *)table;
+	//spinlock:
+	wait_for_all_philos(philo->table);
+
+	// set last meal time
+	while (simulation_is_running(table) == true)
+	{
+		if (check_bool(&philo->table->table_mutex, philo->full))
+			break ;
+		eat(philo);
+		sleep(philo);
+		think(philo);
+	}
+
+	return (NULL);
 }
 
 static void wait_for_all_philos(t_table *table)

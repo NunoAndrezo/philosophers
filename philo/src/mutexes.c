@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:48:00 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/03/21 15:26:29 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/28 20:03:18 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,12 @@ void	mutex_handle(t_mutex *mutex, t_mutex_code code)
 		error_and_exit(RED"Wrong mutex code"RESET);
 }
 
-void	print_state(t_philo *philo, char *str)
+void	print_mutex(t_philo *philo, char *str)
 {
-	pthread_mutex_lock(&philo->table->print_state);
-	printf("%lu %d %s\n", get_time() - philo->table->start_time, philo->id, str);
-	pthread_mutex_unlock(&philo->table->print_state);
+	uint64_t print_time;
+
+	pthread_mutex_lock(&philo->table->print_mutex);
+	print_time = get_time(MICROSECONDS) - philo->table->start_time;
+	printf("%lu %d %s\n", print_time, philo->id, str);
+	pthread_mutex_unlock(&philo->table->print_mutex);
 }

@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/21 15:43:21 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/28 19:58:56 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,16 @@
 
 typedef struct	s_table t_table;
 typedef pthread_mutex_t t_mutex;
+
+typedef enum	e_print_status
+{
+	LEFT_FORK,
+	RIGHT_FORK,
+	EAT,
+	SLEEP,
+	DEAD,
+	
+}	t_print_status;
 
 typedef enum	e_time_code
 {
@@ -97,7 +107,7 @@ struct	s_table
 	bool	philos_are_ready;
 	t_philo	*philosophers;
 	t_fork	*forks;
-	t_mutex	print_state;
+	t_mutex	print_mutex;
 	t_mutex	table_mutex; // avoid data races while reading from table
 };
 
@@ -119,9 +129,8 @@ bool	simulation_is_running(t_table *table);
 void	wait_all_threads(t_table *table);
 
 // time.c
-uint64_t		get_time_micro(void);
-uint64_t		get_time(void);
-bool			ft_usleep(unsigned long long micro_sec, uint64_t flag);
+uint64_t		get_time(t_time_code time_code);
+void			ft_usleep(unsigned long long micro_sec, t_table *table);
 
 //routine.c
 void	*routine(void *philo);
