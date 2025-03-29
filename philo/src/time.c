@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:26:57 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/03/28 21:24:17 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/29 02:01:46 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	ft_usleep(unsigned long long micro_sec, t_table	*table)
 	start = get_time(MICROSECONDS);
 	while (get_time(MICROSECONDS) - start < micro_sec)
 	{
-		if (simulation_is_running(table) != true)
+		if (check_bool(&table->table_mutex, &table->running) == false)
 			break ;
 		elapsed = get_time(MICROSECONDS) - start;
 		rem = micro_sec - elapsed;

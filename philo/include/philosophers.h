@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/28 21:25:24 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/29 02:02:04 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ typedef struct	s_philo
 	bool			dead;
 	long			time_last_eat; //usigned long long
 	pthread_t		philo_thread;
-	t_fork			*first_fork;
-	t_fork			*second_fork;
+	t_fork			*left_fork;
+	t_fork			*right_fork;
 	t_table			*table;
 	t_mutex		philo_mutex; // to comunicate with thread monitor
 }		t_philo;
@@ -109,7 +109,6 @@ struct	s_table
 	bool	philos_are_ready;
 	t_philo	*philosophers;
 	t_fork	*forks;
-	t_mutex	checker;
 	t_mutex	print_mutex;
 	t_mutex	table_mutex; // avoid data races while reading from table
 };
@@ -126,10 +125,6 @@ void	change_bool(t_mutex *mutex, bool *var, bool value);
 bool	check_bool(t_mutex *mutex, bool *var);
 void	change_long(t_mutex *mutex, long *var, long value);
 bool	check_long(t_mutex *mutex, long *var);
-bool	simulation_is_running(t_table *table);
-
-//syncronization.c
-void	wait_all_threads(t_table *table);
 
 // time.c
 uint64_t		get_time(t_time_code time_code);

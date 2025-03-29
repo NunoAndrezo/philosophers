@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 01:55:18 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/28 21:45:12 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/28 23:41:28 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ long	ft_atol(char *s)
 	long	i;
 
 	if (!s || !s[0])
-		return (0);
+		error_and_exit("Invalid Arguments in ft_atol");
 	signal = 1;
 	res = 0;
 	i = 0;
@@ -41,13 +41,15 @@ long	ft_atol(char *s)
 	{
 		if (s[i] >= '0' && s[i] <= '9')
 		{
-			res = res * 10;
-			res = s[i] - '0';
+			res *= 10;
+			res += s[i] - '0';
 		}
 		else
-			error_and_exit(RED"ERROR: Invalid Arguments"RESET);
+			error_and_exit("Invalid Arguments");
 		i++;	
 	}
+	if (res > LONG_MAX / 10 || (res == LONG_MAX / 10 && (s[i] - '0') > LONG_MAX % 10))
+		error_and_exit("Number out of range");
 	return (res * signal);
 }
 
