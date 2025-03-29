@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/29 02:02:04 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/29 23:16:03 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,25 +92,26 @@ typedef struct	s_philo
 	t_fork			*left_fork;
 	t_fork			*right_fork;
 	t_table			*table;
-	t_mutex		philo_mutex; // to comunicate with thread monitor
+	t_mutex			philo_mutex; // to comunicate with thread monitor
 }		t_philo;
 
 struct	s_table
 {
-	long	num_of_philos;
-	long	num_of_forks;
-	long	time_to_die;
-	long	time_to_eat;
-	long	time_to_sleep;
-	long	nr_meals_limit;
-	
-	long	start_time;
-	bool	running; // false if a philo dies or all philos are full
-	bool	philos_are_ready;
-	t_philo	*philosophers;
-	t_fork	*forks;
-	t_mutex	print_mutex;
-	t_mutex	table_mutex; // avoid data races while reading from table
+	long		num_of_philos;
+	long		num_of_forks;
+	long		time_to_die;
+	long		time_to_eat;
+	long		time_to_sleep;
+	long		nr_meals_limit;
+	long		start_time;
+	bool		running; // false if a philo dies or all philos are full
+	bool		philos_are_ready;
+	long		num_threads_running;
+	t_philo		*philosophers;
+	t_fork		*forks;
+	pthread_t	monitor_thread;
+	t_mutex		print_mutex;
+	t_mutex		table_mutex; // avoid data races while reading from table
 };
 
 //main.c
@@ -132,6 +133,9 @@ void			ft_usleep(unsigned long long micro_sec, t_table *table);
 
 //routine.c
 void	*routine(void *philo);
+
+//monitor_routine.c
+void	*monitor_routine(void *table);
 
 //mutexes.c
 void	mutex_handle(t_mutex *mutex, t_mutex_code code);

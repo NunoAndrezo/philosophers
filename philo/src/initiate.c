@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:36:29 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/29 01:50:10 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/29 12:03:20 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	initiate(t_table	*table)
 	table->start_time = 0;
 	table->philos_are_ready = false;
 	table->running = false;
+	table->num_threads_running = 0;
 	mutex_handle(&table->print_mutex, INIT);
 	mutex_handle(&table->table_mutex, INIT);
 	table->philosophers = (t_philo *)malloc(sizeof(t_philo) * table->num_of_philos);

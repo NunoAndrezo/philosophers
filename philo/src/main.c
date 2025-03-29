@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:27:49 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/29 01:52:56 by nuno             ###   ########.fr       */
+/*   Updated: 2025/03/29 11:35:29 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static bool	is_args_good(char **arv, int arc);
 static bool	check_len(char *s);
-static void print_table(t_table *table);
-static void	print_philosophers(t_table *table);
+/* static void print_table(t_table *table);
+static void	print_philosophers(t_table *table); */
 
 int	main(int arc, char **arv)
 {
@@ -30,8 +30,8 @@ int	main(int arc, char **arv)
 			error_and_exit("Arguments are wrong\n");
 		get_arg(table, arc, arv);
 		initiate(table);
-		print_table(table);
-		print_philosophers(table);
+		//print_table(table);
+		//print_philosophers(table);
 		start(table);
 		// clean_everything() // destroy_forks(&table); etcS
 	}
@@ -40,7 +40,7 @@ int	main(int arc, char **arv)
 	return (0);
 }
 
-static void	print_philosophers(t_table *table)
+/* static void	print_philosophers(t_table *table)
 {
 	int	i;
 	i = -1;
@@ -77,7 +77,7 @@ static void print_table(t_table *table)
 	printf("print_mutex: %p\n", &table->print_mutex);
 	printf("table_mutex: %p\n", &table->table_mutex);
 	printf("table: %p\n", table);
-}
+} */
 
 static bool	is_args_good(char **arv, int arc)
 {

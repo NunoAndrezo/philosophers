@@ -5,21 +5,27 @@ static void	ft_sleep(t_philo *philo);
 static void	ft_think(t_philo *philo);
 static void	wait_all_threads(t_table *table);
 
-void	*routine(void *table)
+void	*routine(void *data)
 {
 	t_philo	*philo;
 
-	philo = (t_philo *)table;
-	//spinlock:
+	philo = (t_philo *)data;
 	wait_all_threads(philo->table);
-	// set last meal time
+	change_long(&philo->table->table_mutex, &philo->table->num_threads_running, 1);
 	while (check_bool(&philo->table->table_mutex, &philo->table->running) == true)
 	{
+		if (check_bool(&philo->philo_mutex, &philo->full) == true)
+			return (NULL);
+		if (check_bool(&philo->philo_mutex, &philo->dead) == true)
+		{
+			print_mutex(philo, DEAD);
+			return (NULL);
+		}
 		ft_eat(philo);
 		ft_sleep(philo);
-		if (philo->full == true)
+		if (check_bool(&philo->philo_mutex, &philo->full) == true)
 			return (NULL);
-		if (philo->dead == true)
+		if (check_bool(&philo->philo_mutex, &philo->dead) == true)
 		{
 			print_mutex(philo, DEAD);
 			return (NULL);
