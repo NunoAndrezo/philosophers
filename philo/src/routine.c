@@ -3,7 +3,7 @@
 static void	ft_eat(t_philo *philo);
 static void	ft_sleep(t_philo *philo);
 static void	ft_think(t_philo *philo);
-static void	wait_all_threads(t_table *table);
+void	wait_all_threads(t_table *table);
 
 void	*routine(void *data)
 {
@@ -35,7 +35,7 @@ void	*routine(void *data)
 	return (NULL);
 }
 
-static void	wait_all_threads(t_table *table)
+void	wait_all_threads(t_table *table)
 {
 	while (check_bool(&table->table_mutex, &table->philos_are_ready) == false)
 		usleep(100);

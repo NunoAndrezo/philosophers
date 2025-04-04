@@ -6,11 +6,13 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 11:42:14 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/29 12:01:53 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/03 12:00:38 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
+
+static bool	philo_died(t_philo *philo);
 
 void	*monitor_routine(void *data)
 {
@@ -18,6 +20,8 @@ void	*monitor_routine(void *data)
 	long	i;
 
 	table = (t_table *)data;
+	while (!wait_all_threads(table))
+		usleep(100);
 	while (check_bool(&table->table_mutex, &table->running) == true)
 	{
 		i = -1;
@@ -40,4 +44,18 @@ void	*monitor_routine(void *data)
 		usleep(100);
 	}
 	return (NULL);
+}
+
+static bool	philo_died(t_philo *philo)
+{
+	long elapsed_time;
+	long time_to_die;
+
+	if (check_bool(&philo->philo_mutex, &philo->full) == true)
+		return (false);
+	elapsed_time = get_time(MILISECONDS) - check_long(&philo->philo_mutex, &philo->time_last_eat);
+	time_to_die = philo->table->time_to_die / 1000;
+	if (elapsed_time >= time_to_die)
+		return (true);
+	return (false);
 }
