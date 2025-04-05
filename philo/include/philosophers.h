@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/29 23:16:03 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/05 17:58:59 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@
 #define CYAN    "\x1b[1;36m"
 #define WHITE   "\x1b[1;37m"
 
-typedef struct	s_table t_table;
+typedef struct s_table t_table;
 typedef pthread_mutex_t t_mutex;
 
 typedef enum	e_print_status
@@ -89,10 +89,10 @@ typedef struct	s_philo
 	bool			dead;
 	long			time_last_eat; //usigned long long
 	pthread_t		philo_thread;
-	t_fork			*left_fork;
-	t_fork			*right_fork;
-	t_table			*table;
-	t_mutex			philo_mutex; // to comunicate with thread monitor
+	t_fork		*left_fork;
+	t_fork		*right_fork;
+	t_table		*table;
+	t_mutex		philo_mutex; // to comunicate with thread monitor
 }		t_philo;
 
 struct	s_table
@@ -109,7 +109,7 @@ struct	s_table
 	long		num_threads_running;
 	t_philo		*philosophers;
 	t_fork		*forks;
-	pthread_t	monitor_thread;
+	pthread_t		monitor_thread;
 	t_mutex		print_mutex;
 	t_mutex		table_mutex; // avoid data races while reading from table
 };
@@ -118,21 +118,26 @@ struct	s_table
 //int	main(int arc, char **arv);
 
 //initiate.c
-void		get_arg(t_table *table, int arc, char **arv);
-void		initiate(t_table *table);
+void	get_arg(t_table *table, int arc, char **arv);
+void	initiate(t_table *table);
 
 //checkers_and_changers.c
 void	change_bool(t_mutex *mutex, bool *var, bool value);
 bool	check_bool(t_mutex *mutex, bool *var);
+
 void	change_long(t_mutex *mutex, long *var, long value);
-bool	check_long(t_mutex *mutex, long *var);
+long	check_long(t_mutex *mutex, long *var);
+void	increase_long(t_mutex *mutex, long *var);
 
 // time.c
 uint64_t		get_time(t_time_code time_code);
 void			ft_usleep(unsigned long long micro_sec, t_table *table);
 
 //routine.c
-void	*routine(void *philo);
+void	*routine(void *philoso);
+
+//solo_routine.c
+void	*solo_routine(void *philosopher);
 
 //monitor_routine.c
 void	*monitor_routine(void *table);
@@ -150,6 +155,7 @@ void	start(t_table *table);
 //utils.c
 void	error_and_exit(const char *str);
 long	ft_atol(char *s);
+
 
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:27:49 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/29 11:35:29 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/05 17:46:08 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	main(int arc, char **arv)
 		// clean_everything() // destroy_forks(&table); etcS
 	}
 	else
-		error_and_exit(RED"Invalid number of arguments"RESET GREEN"Correct is ex: ./philo 5 800 200 200 [5]\n"RESET);
+		error_and_exit(RED"Invalid number of arguments\n"RESET GREEN"Correct is ex: ./philo 5 800 200 200 [7]\n"RESET);
 	return (0);
 }
 

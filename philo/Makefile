@@ -15,8 +15,8 @@ CFLAGS				= -Wall -Werror -Wextra -g -O3 -pthread -lpthread
 rm					= rm -f
 
 # Source and Object Files
-SRC					=	src/checkers_and_changers.c src/initiate.c src/main.c \
-						src/mutexes.c src/routine.c src/monitor_routine.c src/start.c \
+SRC					=	src/checkers_and_changers.c src/initiate.c src/main.c src/monitor_routine.c \
+						src/mutexes.c src/routine.c src/solo_routine.c src/start.c \
 						src/threads.c src/time.c src/utils.c \
 
 OBJ					=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))

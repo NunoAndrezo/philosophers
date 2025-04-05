@@ -3,15 +3,16 @@
 static void	ft_eat(t_philo *philo);
 static void	ft_sleep(t_philo *philo);
 static void	ft_think(t_philo *philo);
-void	wait_all_threads(t_table *table);
 
-void	*routine(void *data)
+void	*routine(void *philoso)
 {
 	t_philo	*philo;
 
-	philo = (t_philo *)data;
-	wait_all_threads(philo->table);
-	change_long(&philo->table->table_mutex, &philo->table->num_threads_running, 1);
+	philo = (t_philo *)philoso;
+	while (check_bool(&philo->table->table_mutex, &philo->table->running) == false)
+		usleep(100);
+	change_long(&philo->philo_mutex, &philo->time_last_eat, get_time(MILISECONDS));
+	increase_long(&philo->table->table_mutex, &philo->table->num_threads_running);
 	while (check_bool(&philo->table->table_mutex, &philo->table->running) == true)
 	{
 		if (check_bool(&philo->philo_mutex, &philo->full) == true)
@@ -33,12 +34,6 @@ void	*routine(void *data)
 		ft_think(philo);
 	}
 	return (NULL);
-}
-
-void	wait_all_threads(t_table *table)
-{
-	while (check_bool(&table->table_mutex, &table->philos_are_ready) == false)
-		usleep(100);
 }
 
 static void	ft_eat(t_philo *philo)

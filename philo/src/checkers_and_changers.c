@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 15:29:51 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/29 02:01:56 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/05 17:32:57 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	change_long(t_mutex *mutex, long *var, long value)
 	mutex_handle(mutex, UNLOCK);
 }
 
-bool	check_long(t_mutex *mutex, long *var)
+long	check_long(t_mutex *mutex, long *var)
 {
 	long	ret;
 
@@ -44,4 +44,11 @@ bool	check_long(t_mutex *mutex, long *var)
 	ret = *var;
 	mutex_handle(mutex, UNLOCK);
 	return (ret);
+}
+
+void increase_long(t_mutex *mutex, long *var)
+{
+	mutex_handle(mutex, LOCK);
+	(*var)++;
+	mutex_handle(mutex, UNLOCK);
 }
