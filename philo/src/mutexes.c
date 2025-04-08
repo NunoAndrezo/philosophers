@@ -6,63 +6,43 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:48:00 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/02/26 22:44:28 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/05 18:08:41 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-void	create_forks_mutex(t_philo_data *data)
+void	mutex_handle(t_mutex *mutex, t_mutex_code code)
 {
-	unsigned int	i;
-
-	i = 0;
-	data->forks = malloc(sizeof(pthread_mutex_t *) * data->num_of_forks);
-	if (!data->forks)
-	{
-		write(2, "Error: Malloc failed\n", 21);
-		exit(1); //cant use exit function, is prohibited
-	}
-	while (i < data->num_of_forks)
-	{
-		data->forks[i] = malloc(sizeof(pthread_mutex_t));
-		if (!data->forks[i])
-		{
-			write(2, "Error: Malloc failed\n", 21);
-			exit(1); //i cant use exit function, is prohibited
-		}
-		pthread_mutex_init(data->forks[i], NULL);
-		i++;
-	}
+	if (code == INIT)
+		pthread_mutex_init(mutex, NULL);
+	else if (code == LOCK)
+		pthread_mutex_lock(mutex);
+	else if (code == UNLOCK)
+		pthread_mutex_unlock(mutex);
+	else if (code == DESTROY)
+		pthread_mutex_destroy(mutex);
+	else
+		error_and_exit(RED"Wrong mutex code"RESET);
 }
 
-void	destroy_forks(t_philo_data *data)
+void	print_mutex(t_philo *philo, t_print_status status)
 {
-	unsigned int	i;
+	uint64_t print_time;
 
-	i = 0;
-	while (i < data->num_of_forks)
-	{
-		pthread_mutex_destroy(data->forks[i]);
-		i++;
-	}
-	free(data->forks);
-}
-
-void	create_print_mutex(t_philo_data *data)
-{
-	data->print_state = malloc(sizeof(pthread_mutex_t));
-	if (!data->print_state)
-	{
-		write(2, "Error: Malloc failed\n", 21);
-		exit(1);
-	}
-	pthread_mutex_init(data->print_state, NULL);
-}
-
-void	print_state(t_philo *philo, char *str)
-{
-	pthread_mutex_lock(philo->data->print_state);
-	printf("%lu %d %s\n", get_time() - philo->data->start_time, philo->id, str);
-	pthread_mutex_unlock(philo->data->print_state);
+	if (philo->full)
+		return ;
+	pthread_mutex_lock(&philo->table->print_mutex);
+	print_time = get_time(MILISECONDS) - philo->table->start_time;
+	if ((FIRST_FORK == status|| SECOND_FORK == status) && check_bool(&philo->table->table_mutex, &philo->table->running))
+			printf(BLUE"%ld "RESET"%ld has taken a fork\n", print_time, philo->id);
+	else if (status == EATING && check_bool(&philo->table->table_mutex, &philo->table->running) == 1)
+			printf(YELLOW"%ld "RESET"%ld is eating\n", print_time, philo->id);
+	else if (status == SLEEPING && check_bool(&philo->table->table_mutex, &philo->table->running) == 1)
+			printf(MAGENTA"%ld "RESET"%ld is sleeping\n", print_time, philo->id);
+	else if (status == THINKING && check_bool(&philo->table->table_mutex, &philo->table->running) == 1)
+			printf(CYAN"%ld "RESET"%ld is thinking\n", print_time, philo->id);
+	else if (status == DEAD)
+			printf(RED"%ld "RESET"%ld died\n", print_time, philo->id);
+	pthread_mutex_unlock(&philo->table->print_mutex);
 }
