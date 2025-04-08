@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 11:42:14 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/05 17:37:14 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/08 11:54:14 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	*monitor_routine(void *data)
 		i = -1;
 		while (++i < table->num_of_philos && check_bool(&table->table_mutex, &table->running))
 		{
-			if (philo_died(&table->philosophers[i]))
+			if (philo_died(table->philosophers + i))
 			{
 				change_bool(&table->table_mutex, &table->running, false);
 				print_mutex(&table->philosophers[i], DEAD);

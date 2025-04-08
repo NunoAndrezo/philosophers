@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:46:39 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/04/05 18:10:27 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/08 11:57:55 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,9 @@ void	start(t_table *table)
 	change_bool(&table->table_mutex, &table->philos_are_ready, true);
 	//monitor thread
 	pthread_create(&table->monitor_thread, NULL, monitor_routine, table);
-	pthread_join(table->monitor_thread, NULL);
 	i = -1;
 	while (++i < table->num_of_philos)
 		pthread_join(table->philosophers[i].philo_thread, NULL);
+	change_bool(&table->table_mutex, &table->running, false);
+	pthread_join(table->monitor_thread, NULL);
 }
