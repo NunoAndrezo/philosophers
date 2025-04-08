@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/05 17:58:59 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/08 14:55:12 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,7 @@ void	start(t_table *table);
 void	error_and_exit(const char *str);
 long	ft_atol(char *s);
 
-
+//cleaners_and_frees.c
+void	vileda(t_table *table);
 
 #endif

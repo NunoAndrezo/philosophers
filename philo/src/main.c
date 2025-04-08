@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:27:49 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/05 17:46:08 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/08 15:02:01 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	main(int arc, char **arv)
 		//print_table(table);
 		//print_philosophers(table);
 		start(table);
-		// clean_everything() // destroy_forks(&table); etcS
+		vileda(table);
 	}
 	else
 		error_and_exit(RED"Invalid number of arguments\n"RESET GREEN"Correct is ex: ./philo 5 800 200 200 [7]\n"RESET);

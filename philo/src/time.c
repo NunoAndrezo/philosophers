@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:26:57 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/03/29 23:43:26 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/08 15:09:42 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	ft_usleep(unsigned long long micro_sec, t_table	*table)
 		elapsed = get_time(MICROSECONDS) - start;
 		rem = micro_sec - elapsed;
 		if (rem > 1000)
-			usleep(micro_sec / 2);
+			usleep(rem / 2);
 		else
 		{
 			while (get_time(MICROSECONDS) - start < micro_sec)
