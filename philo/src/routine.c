@@ -50,8 +50,8 @@ static void	ft_eat(t_philo *philo)
 	philo->eat_count++;
 	print_mutex(philo, EATING);
 	ft_usleep(philo->table->time_to_eat, philo->table);
-	if (philo->table->nr_meals_limit > 0 && philo->eat_count == philo->table->nr_meals_limit)
-		change_bool(&philo->table->table_mutex, &philo->full, true);
+	if (check_long(&philo->table->table_mutex, &philo->table->nr_meals_limit) > 0 && check_long(&philo->philo_mutex, &philo->eat_count) == philo->table->nr_meals_limit)
+		change_bool(&philo->philo_mutex, &philo->full, true);
 	mutex_handle(&philo->left_fork->fork, UNLOCK);
 	mutex_handle(&philo->right_fork->fork, UNLOCK);
 }
