@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initiate.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:36:29 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/08 15:09:45 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/09 19:20:11 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ static void	initiate_philosopher(t_table *table)
 		philo->id = i + 1;
 		philo->full = false;
 		philo->eat_count = 0;
+		philo->dead = false;
 		philo->table = table;
 		philo->time_last_eat = 0;
 		mutex_handle(&philo->philo_mutex, INIT);
