@@ -3,59 +3,69 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 01:55:18 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/05 17:58:44 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/14 10:26:02 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
+static int	ft_atol_helper(char *s, long *i);
+
 void	error_and_exit(const char *str)
 {
-	printf(RED"Error %s\n"RESET, str);
+	printf(RED "Error %s\n" RESET, str);
 	exit(1);
 }
 
 long	ft_atol(char *s)
 {
 	long	signal;
-	long	res;
+	long	r;
 	long	i;
 
+	i = 0;
+	r = 0;
 	if (!s || !s[0])
 		error_and_exit("Invalid Arguments in ft_atol");
-	signal = 1;
-	res = 0;
-	i = 0;
 	while (s[i] == ' ')
 		i++;
-	if (s[i] == '-' || s[i] == '+')
-	{
-		if (s[i] == '-')
-			signal = -1;
-		i++;
-	}
-	while(s[i])
+	signal = ft_atol_helper(s, &i);
+	while (s[i])
 	{
 		if (s[i] >= '0' && s[i] <= '9')
 		{
-			res *= 10;
-			res += s[i] - '0';
+			r *= 10;
+			r += s[i++] - '0';
 		}
 		else
 			error_and_exit("Invalid Arguments");
-		i++;	
 	}
-	if (res > LONG_MAX / 10 || (res == LONG_MAX / 10 && (s[i] - '0') > LONG_MAX % 10))
+	if (r > LONG_MAX / 10
+		|| (r == LONG_MAX / 10 && (s[i] - '0') > LONG_MAX % 10))
 		error_and_exit("Number out of range");
-	return (res * signal);
+	return (r * signal);
+}
+
+static int	ft_atol_helper(char *s, long *i)
+{
+	int		signal;
+	long	j;
+
+	j = *i;
+	signal = 1;
+	if (s[j] == '-' || s[j] == '+')
+	{
+		if (s[j] == '-')
+			signal = -1;
+		j++;
+	}
+	*i = j;
+	return (signal);
 }
 
 /* adicionar ao makefile a de cima.
-
 adicionar ao libft:
-
 ft_matrix_len(); */
-

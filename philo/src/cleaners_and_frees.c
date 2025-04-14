@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 12:01:43 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/08 17:51:04 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/14 09:52:09 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	vileda(t_table *table)
 	i = -1;
 	if (!table)
 		return ;
-	while(++i < table->num_of_philos)
+	while (++i < table->num_of_philos)
 	{
 		pthread_mutex_destroy(&table->philosophers[i].philo_mutex);
 		pthread_mutex_destroy(&table->forks[i].fork);

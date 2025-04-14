@@ -6,14 +6,14 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:36:29 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/09 19:20:11 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/04/14 10:29:08 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
 static void	initiate_philosopher(t_table *table);
-static void assign_forks(t_philo *philo, t_fork *forks, long index);
+static void	assign_forks(t_philo *philo, t_fork *forks, long index);
 
 void	get_arg(t_table *table, int arc, char **arv)
 {
@@ -22,15 +22,16 @@ void	get_arg(t_table *table, int arc, char **arv)
 	table->time_to_die = (ft_atol(arv[2]) * 1000);
 	table->time_to_eat = (ft_atol(arv[3]) * 1000);
 	table->time_to_sleep = (ft_atol(arv[4]) * 1000);
-	if (table->time_to_die < 60000 || table->time_to_eat < 6e4 || table->time_to_sleep < 6e4)
-		error_and_exit(RED"Use timestamps bigger than 60ms"RESET);
+	if (table->time_to_die < 60000 || table->time_to_eat < 6e4
+		|| table->time_to_sleep < 6e4)
+		error_and_exit(RED "Use timestamps bigger than 60ms" RESET);
 	if (arc == 6)
 		table->nr_meals_limit = ft_atol(arv[5]);
 	else
 		table->nr_meals_limit = -1;
 }
 
-void	initiate(t_table	*table)
+void	initiate(t_table *table)
 {
 	long	i;
 
@@ -41,18 +42,16 @@ void	initiate(t_table	*table)
 	table->num_threads_running = 0;
 	mutex_handle(&table->print_mutex, INIT);
 	mutex_handle(&table->table_mutex, INIT);
-	table->philosophers = (t_philo *)malloc(sizeof(t_philo) * table->num_of_philos);
+	table->philosophers = (t_philo *)malloc(sizeof(t_philo)
+			* table->num_of_philos);
 	if (!table->philosophers)
-		error_and_exit(RED"Error: Malloc failed"RESET);
+		error_and_exit(RED "Error: Malloc failed" RESET);
 	table->forks = (t_fork *)malloc(sizeof(t_fork) * table->num_of_forks);
 	if (!table->forks)
-		error_and_exit(RED"Error: Malloc failed"RESET);
+		error_and_exit(RED "Error: Malloc failed" RESET);
 	i = -1;
 	while (++i < table->num_of_philos)
-	{
 		mutex_handle(&table->forks[i].fork, INIT);
-		//table->forks[i].id = i + 1;
-	}
 	initiate_philosopher(table);
 }
 
@@ -76,7 +75,7 @@ static void	initiate_philosopher(t_table *table)
 	}
 }
 
-static void assign_forks(t_philo *philo, t_fork *forks, long index)
+static void	assign_forks(t_philo *philo, t_fork *forks, long index)
 {
 	long	philo_nbr;
 
@@ -84,11 +83,11 @@ static void assign_forks(t_philo *philo, t_fork *forks, long index)
 	if (philo->id % 2 == 0)
 	{
 		philo->left_fork = &forks[index];
-		philo->right_fork = &forks[(index + 1) % philo_nbr]; // 2 + 1 / 10 = 0,3 o resto e 3 // 4 + 1 / 10 = 0,5 o resto e 5 // 6 + 1 / 10 = 0,7 o resto e 7 // 8 + 1 / 10 = 0,9 o resto e 9 // 10 + 1 / 10 = 0,11 o resto e 1
+		philo->right_fork = &forks[(index + 1) % philo_nbr];
 	}
 	else
 	{
-		philo->left_fork = &forks[(index + 1) % philo_nbr]; // 1+1 / 10 = 0,2 o resto e 2. // 3 + 1 / 10 = 0,4 o resto e 4 // 5 + 1 / 10 = 0,6 o resto e 6 // 7 + 1 / 10 = 0,8 o resto e 8 // 9 + 1 / 10 = 0,10 o resto e 0
+		philo->left_fork = &forks[(index + 1) % philo_nbr];
 		philo->right_fork = &forks[index];
 	}
 }

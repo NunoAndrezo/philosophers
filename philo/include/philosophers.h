@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/08 14:55:12 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/14 10:59:54 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef PHILOSOPHERS_H
-#  define PHILOSOPHERS_H
+#ifndef PHILOSOPHERS_H
+# define PHILOSOPHERS_H
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -32,20 +32,20 @@
 # include "../printf/ft_printf.h"
 # include <errno.h>
 
-#define RESET   "\x1b[0m"
-#define BLACK   "\x1b[1;30m"
-#define RED     "\x1b[1;31m"
-#define GREEN   "\x1b[1;32m"
-#define YELLOW  "\x1b[1;33m"
-#define BLUE    "\x1b[1;34m"
-#define MAGENTA "\x1b[1;35m"
-#define CYAN    "\x1b[1;36m"
-#define WHITE   "\x1b[1;37m"
+# define RESET	"\x1b[0m"
+# define BLACK	"\x1b[1;30m"
+# define RED		"\x1b[1;31m"
+# define GREEN	"\x1b[1;32m"
+# define YELLOW	"\x1b[1;33m"
+# define BLUE	"\x1b[1;34m"
+# define MAGENTA	"\x1b[1;35m"
+# define CYAN	"\x1b[1;36m"
+# define WHITE	"\x1b[1;37m"
 
-typedef struct s_table t_table;
-typedef pthread_mutex_t t_mutex;
+typedef struct s_table	t_table;
+typedef pthread_mutex_t	t_mutex;
 
-typedef enum	e_print_status
+typedef enum e_print_status
 {
 	FIRST_FORK,
 	SECOND_FORK,
@@ -53,17 +53,16 @@ typedef enum	e_print_status
 	SLEEPING,
 	THINKING,
 	DEAD,
-	
 }	t_print_status;
 
-typedef enum	e_time_code
+typedef enum e_time_code
 {
 	SECONDS,
 	MILISECONDS,
 	MICROSECONDS,
 }			t_time_code;
 
-typedef enum	e_mutex_code
+typedef enum e_mutex_code
 {
 	INIT,
 	LOCK,
@@ -72,23 +71,22 @@ typedef enum	e_mutex_code
 	DESTROY,
 	JOIN,
 	DETACH,
+}	t_mutex_code;
 
-} t_mutex_code;
-
-typedef struct	s_fork
+typedef struct s_fork
 {
-	long		id;
+	long	id;
 	t_mutex	fork;
 }		t_fork;
 
-typedef struct	s_philo
+typedef struct s_philo
 {
-	long			id;
-	long			eat_count;
-	bool			full;
-	bool			dead;
-	long			time_last_eat; //usigned long long
-	pthread_t		philo_thread;
+	long		id;
+	long		eat_count;
+	bool		full;
+	bool		dead;
+	long		time_last_eat; //usigned long long
+	pthread_t	philo_thread;
 	t_fork		*left_fork;
 	t_fork		*right_fork;
 	t_table		*table;
@@ -109,7 +107,7 @@ struct	s_table
 	long		num_threads_running;
 	t_philo		*philosophers;
 	t_fork		*forks;
-	pthread_t		monitor_thread;
+	pthread_t	monitor_thread;
 	t_mutex		print_mutex;
 	t_mutex		table_mutex; // avoid data races while reading from table
 };
@@ -118,45 +116,48 @@ struct	s_table
 //int	main(int arc, char **arv);
 
 //initiate.c
-void	get_arg(t_table *table, int arc, char **arv);
-void	initiate(t_table *table);
+void			get_arg(t_table *table, int arc, char **arv);
+void			initiate(t_table *table);
 
 //checkers_and_changers.c
-void	change_bool(t_mutex *mutex, bool *var, bool value);
-bool	check_bool(t_mutex *mutex, bool *var);
+void			change_bool(t_mutex *mutex, bool *var, bool value);
+bool			check_bool(t_mutex *mutex, bool *var);
 
-void	change_long(t_mutex *mutex, long *var, long value);
-long	check_long(t_mutex *mutex, long *var);
-void	increase_long(t_mutex *mutex, long *var);
+void			change_long(t_mutex *mutex, long *var, long value);
+long			check_long(t_mutex *mutex, long *var);
+void			increase_long(t_mutex *mutex, long *var);
 
 // time.c
 uint64_t		get_time(t_time_code time_code);
 void			ft_usleep(unsigned long long micro_sec, t_table *table);
 
 //routine.c
-void	*routine(void *philoso);
+void			*routine(void *philoso);
+
+//routine2.c
+void			breakfast(t_philo *philo);
+void			ft_zzz(t_philo *philo);
+void			iq_rising(t_philo *philo, bool did_routine_start);
+void			make_a_mf_wait(t_philo *philo);
 
 //solo_routine.c
-void	*solo_routine(void *philosopher);
+void			*solo_routine(void *philosopher);
 
 //monitor_routine.c
-void	*monitor_routine(void *table);
+void			*monitor_routine(void *table);
 
 //mutexes.c
-void	mutex_handle(t_mutex *mutex, t_mutex_code code);
-void	print_mutex(t_philo *philo, t_print_status status);
-
-//threads.c
-void	thread_handle(pthread_t *thread, void *(*routine)(void *), void *table, t_mutex_code code);
+void			mutex_handle(t_mutex *mutex, t_mutex_code code);
+void			print_mutex(t_philo *philo, t_print_status status);
 
 //start.c
-void	start(t_table *table);
+void			start(t_table *table);
 
 //utils.c
-void	error_and_exit(const char *str);
-long	ft_atol(char *s);
+void			error_and_exit(const char *str);
+long			ft_atol(char *s);
 
 //cleaners_and_frees.c
-void	vileda(t_table *table);
+void			vileda(t_table *table);
 
 #endif

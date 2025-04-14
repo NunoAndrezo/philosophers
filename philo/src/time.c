@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:26:57 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/04/08 15:09:42 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/14 09:53:05 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ uint64_t	get_time(t_time_code time_code)
 		return (error_and_exit("Wrong time_code"), 2222);
 }
 
-void	ft_usleep(unsigned long long micro_sec, t_table	*table)
+void	ft_usleep(unsigned long long micro_sec, t_table *table)
 {
 	uint64_t	start;
 	uint64_t	elapsed;
