@@ -3,50 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:26:57 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/04/14 09:53:05 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/04/17 23:32:18 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-uint64_t	get_time(t_time_code time_code)
+long	get_time()
 {
 	struct timeval	time;
 
 	if (gettimeofday(&time, NULL))
 		error_and_exit("gettimeofday failed\n");
-	if (SECONDS == time_code)
-		return (time.tv_sec + (time.tv_usec / 1000000));
-	else if (MILISECONDS == time_code)
-		return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
-	else if (MICROSECONDS == time_code)
-		return ((time.tv_sec * 1000000) + time.tv_usec);
-	else
-		return (error_and_exit("Wrong time_code"), 2222);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-void	ft_usleep(unsigned long long micro_sec, t_table *table)
+void	ft_usleep(long time_to_wait)
 {
-	uint64_t	start;
-	uint64_t	elapsed;
-	uint64_t	rem;
+	long	current_time;
 
-	start = get_time(MICROSECONDS);
-	while (get_time(MICROSECONDS) - start < micro_sec)
-	{
-		if (check_bool(&table->table_mutex, &table->running) == false)
-			break ;
-		elapsed = get_time(MICROSECONDS) - start;
-		rem = micro_sec - elapsed;
-		if (rem > 1000)
-			usleep(rem / 2);
-		else
-		{
-			while (get_time(MICROSECONDS) - start < micro_sec)
-				continue ;
-		}
-	}
+	current_time = get_time();
+	while (get_time() - current_time < time_to_wait)
+		usleep(1);
+}
+
+long	get_current_time(long current)
+{
+	return (get_time() - current);
 }

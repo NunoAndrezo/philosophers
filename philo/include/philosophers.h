@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/14 10:59:54 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/04/17 22:45:28 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,15 @@
 # include "../printf/ft_printf.h"
 # include <errno.h>
 
-# define RESET	"\x1b[0m"
-# define BLACK	"\x1b[1;30m"
+# define RESET		"\x1b[0m"
+# define BLACK		"\x1b[1;30m"
 # define RED		"\x1b[1;31m"
-# define GREEN	"\x1b[1;32m"
-# define YELLOW	"\x1b[1;33m"
-# define BLUE	"\x1b[1;34m"
+# define GREEN		"\x1b[1;32m"
+# define YELLOW		"\x1b[1;33m"
+# define BLUE		"\x1b[1;34m"
 # define MAGENTA	"\x1b[1;35m"
-# define CYAN	"\x1b[1;36m"
-# define WHITE	"\x1b[1;37m"
+# define CYAN		"\x1b[1;36m"
+# define WHITE		"\x1b[1;37m"
 
 typedef struct s_table	t_table;
 typedef pthread_mutex_t	t_mutex;
@@ -54,13 +54,6 @@ typedef enum e_print_status
 	THINKING,
 	DEAD,
 }	t_print_status;
-
-typedef enum e_time_code
-{
-	SECONDS,
-	MILISECONDS,
-	MICROSECONDS,
-}			t_time_code;
 
 typedef enum e_mutex_code
 {
@@ -85,12 +78,12 @@ typedef struct s_philo
 	long		eat_count;
 	bool		full;
 	bool		dead;
-	long		time_last_eat; //usigned long long
+	long		time_last_eat;
 	pthread_t	philo_thread;
 	t_fork		*left_fork;
 	t_fork		*right_fork;
 	t_table		*table;
-	t_mutex		philo_mutex; // to comunicate with thread monitor
+	t_mutex		philo_mutex;
 }		t_philo;
 
 struct	s_table
@@ -102,14 +95,14 @@ struct	s_table
 	long		time_to_sleep;
 	long		nr_meals_limit;
 	long		start_time;
-	bool		running; // false if a philo dies or all philos are full
+	bool		running;
 	bool		philos_are_ready;
 	long		num_threads_running;
 	t_philo		*philosophers;
 	t_fork		*forks;
 	pthread_t	monitor_thread;
 	t_mutex		print_mutex;
-	t_mutex		table_mutex; // avoid data races while reading from table
+	t_mutex		table_mutex;
 };
 
 //main.c
@@ -128,20 +121,17 @@ long			check_long(t_mutex *mutex, long *var);
 void			increase_long(t_mutex *mutex, long *var);
 
 // time.c
-uint64_t		get_time(t_time_code time_code);
-void			ft_usleep(unsigned long long micro_sec, t_table *table);
+long			get_time();
+void			ft_usleep(long start);
+long			get_current_time(long current);
 
 //routine.c
 void			*routine(void *philoso);
 
 //routine2.c
-void			breakfast(t_philo *philo);
+void			arroz_de_cabidela(t_philo *philo);
 void			ft_zzz(t_philo *philo);
-void			iq_rising(t_philo *philo, bool did_routine_start);
-void			make_a_mf_wait(t_philo *philo);
-
-//solo_routine.c
-void			*solo_routine(void *philosopher);
+void			thinking_alot(t_philo *philo);
 
 //monitor_routine.c
 void			*monitor_routine(void *table);

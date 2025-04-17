@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:27:49 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/14 10:04:09 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/04/17 17:57:30 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,16 @@ int	main(int arc, char **arv)
 {
 	t_table	*table;
 
-	table = ft_calloc(1, sizeof(t_table));
-	if (!table)
-		error_and_exit(RED "Error: Malloc failed" RESET);
 	if (arc == 5 || arc == 6)
 	{
+		table = ft_calloc(1, sizeof(t_table));
+		if (!table)
+			error_and_exit(RED "Error: Malloc failed" RESET);
 		if (is_args_good(arv, arc) == false)
+		{
+			vileda(table);
 			error_and_exit("Arguments are wrong\n");
+		}
 		get_arg(table, arc, arv);
 		initiate(table);
 		start(table);

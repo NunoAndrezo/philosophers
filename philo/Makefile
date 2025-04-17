@@ -11,7 +11,7 @@ NOCOLOR = \033[0m
 
 # Compiler and Flags
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -g -pthread -fsanitize=thread
+CFLAGS = -Wall -Werror -Wextra -g -pthread #-fsanitize=thread
 
 # Dependency Generation Flags
 # -MMD: Generates dependency files (.d) while compiling
@@ -30,7 +30,7 @@ PRINTF_DIR = printf
 # Source files
 SRC_FILES =	src/checkers_and_changers.c src/cleaners_and_frees.c \
 			src/initiate.c src/monitor_routine.c src/mutexes.c \
-			src/routine.c src/routine2.c src/solo_routine.c src/start.c \
+			src/routine.c src/routine2.c src/start.c \
 			src/time.c src/utils.c src/main.c \
 
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))

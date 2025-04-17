@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:36:29 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/14 10:29:08 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/04/17 22:04:43 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,20 @@ void	get_arg(t_table *table, int arc, char **arv)
 {
 	table->num_of_philos = ft_atol(arv[1]);
 	table->num_of_forks = table->num_of_philos;
-	table->time_to_die = (ft_atol(arv[2]) * 1000);
-	table->time_to_eat = (ft_atol(arv[3]) * 1000);
-	table->time_to_sleep = (ft_atol(arv[4]) * 1000);
-	if (table->time_to_die < 60000 || table->time_to_eat < 6e4
-		|| table->time_to_sleep < 6e4)
+	table->time_to_die = (ft_atol(arv[2]));
+	table->time_to_eat = (ft_atol(arv[3]));
+	table->time_to_sleep = (ft_atol(arv[4]));
+	if (table->time_to_die < 60 || table->time_to_eat < 60
+		|| table->time_to_sleep < 60)
+	{
+		vileda(table);
 		error_and_exit(RED "Use timestamps bigger than 60ms" RESET);
+	}
+	if (table->num_of_philos <= 0)
+	{
+		vileda(table);
+		error_and_exit(RED "Real numbers for the philos [1-200]" RESET);
+	}
 	if (arc == 6)
 		table->nr_meals_limit = ft_atol(arv[5]);
 	else
@@ -70,9 +78,12 @@ static void	initiate_philosopher(t_table *table)
 		philo->dead = false;
 		philo->table = table;
 		philo->time_last_eat = 0;
-		mutex_handle(&philo->philo_mutex, INIT);
+		pthread_mutex_init(&philo->philo_mutex, NULL);
 		assign_forks(philo, table->forks, i);
+		pthread_create(&table->philosophers[i].philo_thread, NULL, routine,
+			&table->philosophers[i]);
 	}
+	pthread_create(&table->monitor_thread, NULL, monitor_routine, table);
 }
 
 static void	assign_forks(t_philo *philo, t_fork *forks, long index)

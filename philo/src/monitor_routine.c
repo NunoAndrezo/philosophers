@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor_routine.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 11:42:14 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/14 09:52:29 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/04/17 22:10:44 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	*monitor_routine(void *data)
 			{
 				change_bool(&table->table_mutex, &table->running, false);
 				print_mutex(&table->philosophers[i], DEAD);
-				break ;
+				return (NULL);
 			}
 		}
 	}
@@ -49,10 +49,10 @@ static bool	philo_died(t_philo *philo)
 
 	if (check_bool(&philo->philo_mutex, &philo->full) == true)
 		return (false);
-	time_elapsed = get_time(MILISECONDS) - check_long(&philo->philo_mutex,
+	time_elapsed = get_current_time(philo->table->start_time) - check_long(&philo->philo_mutex,
 			&philo->time_last_eat);
-	time_to_die = philo->table->time_to_die / 1000;
-	if (time_elapsed >= time_to_die)
+	time_to_die = philo->table->time_to_die;
+	if (time_elapsed > time_to_die)
 		return (true);
 	return (false);
 }
