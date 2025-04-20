@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initiate.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:36:29 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/17 22:04:43 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/04/18 22:54:13 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	initiate(t_table *table)
 {
 	long	i;
 
-	i = -1;
 	table->start_time = 0;
 	table->philos_are_ready = false;
 	table->running = false;
@@ -80,10 +79,7 @@ static void	initiate_philosopher(t_table *table)
 		philo->time_last_eat = 0;
 		pthread_mutex_init(&philo->philo_mutex, NULL);
 		assign_forks(philo, table->forks, i);
-		pthread_create(&table->philosophers[i].philo_thread, NULL, routine,
-			&table->philosophers[i]);
 	}
-	pthread_create(&table->monitor_thread, NULL, monitor_routine, table);
 }
 
 static void	assign_forks(t_philo *philo, t_fork *forks, long index)

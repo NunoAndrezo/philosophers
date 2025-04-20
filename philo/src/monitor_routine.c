@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   monitor_routine.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 11:42:14 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/17 22:10:44 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/04/18 23:10:19 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
 static bool	philo_died(t_philo *philo);
-static bool	are_all_threads_running(t_mutex *mutex, long *nr_of_threads,
-				long nr_of_philos);
+static bool	did_all_eat(t_table *table);
 
 void	*monitor_routine(void *data)
 {
@@ -22,24 +21,46 @@ void	*monitor_routine(void *data)
 	long	i;
 
 	table = (t_table *)data;
-	while (are_all_threads_running(&table->table_mutex,
-			&table->num_threads_running, table->num_of_philos) == false)
-		usleep(10);
-	while (check_bool(&table->table_mutex, &table->running))
+	while (check_bool(&table->table_mutex, &table->running) == true)
 	{
 		i = -1;
-		while (++i < table->num_of_philos && check_bool(&table->table_mutex,
-				&table->running))
+		while (++i < table->num_of_philos)
 		{
-			if (philo_died(table->philosophers + i))
+			if (check_bool(&table->table_mutex, &table->running) == false)
+				break ;
+			if (philo_died(&table->philosophers[i]) == true)
 			{
-				change_bool(&table->table_mutex, &table->running, false);
 				print_mutex(&table->philosophers[i], DEAD);
-				return (NULL);
+				change_bool(&table->table_mutex, &table->running, false);
+				break ;
 			}
 		}
+		if (did_all_eat(table) == true)
+			return (NULL);
 	}
 	return (NULL);
+}
+
+static bool	did_all_eat(t_table *table)
+{
+	int		finished;
+	int		i;
+
+	i = -1;
+	finished = 0;
+	if (table->nr_meals_limit == -1)
+		return (false);
+	while (++i < table->num_of_philos)
+	{
+		if (check_bool(&table->philosophers[i].philo_mutex, &table->philosophers[i].full) == true)
+			finished++;
+	}
+	if (finished == table->num_of_philos)
+	{
+		change_bool(&table->table_mutex, &table->running, false);
+		return (true);
+	}
+	return (false);
 }
 
 static bool	philo_died(t_philo *philo)
@@ -55,17 +76,4 @@ static bool	philo_died(t_philo *philo)
 	if (time_elapsed > time_to_die)
 		return (true);
 	return (false);
-}
-
-static bool	are_all_threads_running(t_mutex *mutex, long *nr_of_threads,
-		long nr_of_philos)
-{
-	bool	ret;
-
-	ret = false;
-	mutex_handle(mutex, LOCK);
-	if (*nr_of_threads == nr_of_philos)
-		ret = true;
-	mutex_handle(mutex, UNLOCK);
-	return (ret);
 }

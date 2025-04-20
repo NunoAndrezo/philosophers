@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/17 22:45:28 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/04/18 23:14:00 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,11 +127,6 @@ long			get_current_time(long current);
 
 //routine.c
 void			*routine(void *philoso);
-
-//routine2.c
-void			arroz_de_cabidela(t_philo *philo);
-void			ft_zzz(t_philo *philo);
-void			thinking_alot(t_philo *philo);
 
 //monitor_routine.c
 void			*monitor_routine(void *table);
