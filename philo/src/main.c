@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:27:49 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/18 03:37:40 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/21 15:03:47 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,11 @@ int	main(int arc, char **arv)
 
 	if (arc == 5 || arc == 6)
 	{
+		if (is_args_good(arv, arc) == false)
+			error_and_exit("Arguments are wrong");
 		table = ft_calloc(1, sizeof(t_table));
 		if (!table)
 			error_and_exit(RED "Error: Malloc failed" RESET);
-		if (is_args_good(arv, arc) == false)
-		{
-			vileda(table);
-			error_and_exit("Arguments are wrong\n");
-		}
 		get_arg(table, arc, arv);
 		initiate(table);
 		start(table);
@@ -36,7 +33,7 @@ int	main(int arc, char **arv)
 	}
 	else
 		error_and_exit(RED "Invalid number of arguments\n"
-			RESET GREEN "Correct is ex: ./philo 5 800 200 200 [7]\n" RESET);
+			RESET GREEN "Correct is ex: ./philo 5 800 200 200 [7]" RESET);
 	return (0);
 }
 

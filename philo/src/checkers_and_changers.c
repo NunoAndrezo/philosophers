@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checkers_and_changers.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 15:29:51 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/17 21:36:15 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/04/21 14:14:46 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,12 @@ void	increase_long(t_mutex *mutex, long *var)
 {
 	mutex_handle(mutex, LOCK);
 	(*var)++;
+	mutex_handle(mutex, UNLOCK);
+}
+
+void	decrease_long(t_mutex *mutex, long *var)
+{
+	mutex_handle(mutex, LOCK);
+	(*var)--;
 	mutex_handle(mutex, UNLOCK);
 }

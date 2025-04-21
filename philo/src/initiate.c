@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:36:29 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/18 22:54:13 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/21 14:30:30 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ void	get_arg(t_table *table, int arc, char **arv)
 		vileda(table);
 		error_and_exit(RED "Use timestamps bigger than 60ms" RESET);
 	}
-	if (table->num_of_philos <= 0)
+	if (table->num_of_philos <= 0 || table->num_of_philos > 200)
 	{
 		vileda(table);
-		error_and_exit(RED "Real numbers for the philos [1-200]" RESET);
+		error_and_exit(RED "Number of philosophers [1-200]" RESET);
 	}
 	if (arc == 6)
 		table->nr_meals_limit = ft_atol(arv[5]);

@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 10:29:29 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/04/18 23:23:31 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/21 14:56:31 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,26 @@ void	*routine(void *philoso)
 	while (check_bool(&philo->table->table_mutex,
 			&philo->table->running) == false)
 		usleep(1);
+	increase_long(&philo->table->table_mutex, &philo->table->num_threads_running);
 	if (philo->table->num_of_philos == 1)
 		return (solo_routine(philo), NULL);
 	make_philos_wait(philo);
 	while (check_bool(&philo->table->table_mutex,
 		&philo->table->running) == true)
 	{
+	/* 	while (check_if_i_can_eat(philo) == false)
+			ft_usleep(1); */
 		arroz_de_cabidela(philo);
 		print_mutex(philo, SLEEPING);
+		if (philo->table->nr_meals_limit == philo->eat_count)
+		{
+			philo->full = true;
+			break ;
+		}
 		ft_usleep(philo->table->time_to_sleep);
 		print_mutex(philo, THINKING);
 	}
+	decrease_long(&philo->table->table_mutex, &philo->table->num_threads_running);
 	return (NULL);
 }
 

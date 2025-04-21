@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:46:39 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/04/18 23:23:14 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/21 15:06:29 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	start(t_table *table)
 	long	i;
 
 	if (table->nr_meals_limit == 0)
-		return ;
+		return (error_and_exit("Everyone died of hunger"), (void)0);
 	if (pthread_create(&table->monitor_thread, NULL, monitor_routine, table) != 0)
 	{
 		vileda(table);

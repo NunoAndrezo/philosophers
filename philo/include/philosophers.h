@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/18 23:14:00 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/21 15:26:42 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ bool			check_bool(t_mutex *mutex, bool *var);
 void			change_long(t_mutex *mutex, long *var, long value);
 long			check_long(t_mutex *mutex, long *var);
 void			increase_long(t_mutex *mutex, long *var);
+void			decrease_long(t_mutex *mutex, long *var);
 
 // time.c
 long			get_time();
@@ -141,8 +142,6 @@ void			start(t_table *table);
 //utils.c
 void			error_and_exit(const char *str);
 long			ft_atol(char *s);
-
-//cleaners_and_frees.c
 void			vileda(t_table *table);
 
 #endif
