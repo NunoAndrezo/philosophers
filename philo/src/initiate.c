@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:36:29 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/21 14:30:30 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/22 23:39:28 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static void	initiate_philosopher(t_table *table)
 		philo->dead = false;
 		philo->table = table;
 		philo->time_last_eat = 0;
-		pthread_mutex_init(&philo->philo_mutex, NULL);
+		mutex_handle(&philo->philo_mutex, INIT);
 		assign_forks(philo, table->forks, i);
 	}
 }

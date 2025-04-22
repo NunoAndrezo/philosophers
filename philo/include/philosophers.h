@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/21 15:26:42 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/22 23:34:19 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,11 @@ typedef struct s_philo
 	bool		full;
 	bool		dead;
 	long		time_last_eat;
+	t_mutex	philo_mutex;
 	pthread_t	philo_thread;
 	t_fork		*left_fork;
 	t_fork		*right_fork;
 	t_table		*table;
-	t_mutex		philo_mutex;
 }		t_philo;
 
 struct	s_table

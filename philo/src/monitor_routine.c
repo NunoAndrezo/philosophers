@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 11:42:14 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/21 15:32:21 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/22 23:51:43 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,33 @@ static bool	did_all_leave(t_table *table)
 
 static bool	philo_died(t_philo *philo)
 {
-	long	time_elapsed;
+/* 	long	time_elapsed;
 	long	time_to_die;
+	long	t_last_eat;
 
 	if (philo->full == true)
 		return (false);
-	time_elapsed = get_current_time(philo->table->start_time) - check_long(&philo->philo_mutex,
-			&philo->time_last_eat);
+	t_last_eat = check_long(&philo->table->table_mutex, &philo->time_last_eat);
+	time_elapsed = get_current_time(philo->table->start_time) - t_last_eat;
 	time_to_die = philo->table->time_to_die;
-	if (time_elapsed > time_to_die)
+	if (time_elapsed > time_to_die + 5)
 		return (true);
+	return (false); */
+	long now;
+	long elapsed;
+
+	if (philo->full == true)
+		return (false);
+	pthread_mutex_lock(&philo->philo_mutex);
+	now = get_time();
+	elapsed = now - philo->time_last_eat;
+	pthread_mutex_unlock(&philo->philo_mutex);
+
+	if (elapsed > philo->table->time_to_die + 5)
+	{
+		print_mutex(philo, DEAD);
+		change_bool(&philo->table->table_mutex, &philo->table->running, false);
+		return (true);
+	}
 	return (false);
 }

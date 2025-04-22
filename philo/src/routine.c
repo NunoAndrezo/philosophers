@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 10:29:29 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/04/21 14:56:31 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/22 23:56:20 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,24 @@ void	*routine(void *philoso)
 	t_philo	*philo;
 
 	philo = (t_philo *)philoso;
-	while (check_bool(&philo->table->table_mutex,
-			&philo->table->running) == false)
-		usleep(1);
 	increase_long(&philo->table->table_mutex, &philo->table->num_threads_running);
+
+	// Wait until all threads are created and start signal is given
+	while (!check_bool(&philo->table->table_mutex, &philo->table->philos_are_ready))
+		usleep(100);
+
+	// Now wait until the simulation officially starts
+	while (!check_bool(&philo->table->table_mutex, &philo->table->running))
+		usleep(100);
 	if (philo->table->num_of_philos == 1)
 		return (solo_routine(philo), NULL);
 	make_philos_wait(philo);
 	while (check_bool(&philo->table->table_mutex,
 		&philo->table->running) == true)
 	{
-	/* 	while (check_if_i_can_eat(philo) == false)
-			ft_usleep(1); */
 		arroz_de_cabidela(philo);
 		print_mutex(philo, SLEEPING);
-		if (philo->table->nr_meals_limit == philo->eat_count)
+		if (philo->table->nr_meals_limit == philo->eat_count && philo->table->nr_meals_limit > 0)
 		{
 			philo->full = true;
 			break ;
@@ -49,14 +52,19 @@ void	*routine(void *philoso)
 
 static void	arroz_de_cabidela(t_philo *philo)
 {
+	// Lock forks in consistent order
 	mutex_handle(&philo->left_fork->fork, LOCK);
 	print_mutex(philo, FIRST_FORK);
 	mutex_handle(&philo->right_fork->fork, LOCK);
 	print_mutex(philo, SECOND_FORK);
+	
+	pthread_mutex_lock(&philo->philo_mutex);
+	philo->time_last_eat = get_time();
+	pthread_mutex_unlock(&philo->philo_mutex);
+	
 	print_mutex(philo, EATING);
-	change_long(&philo->philo_mutex, &philo->time_last_eat, get_current_time(philo->table->start_time));
 	ft_usleep(philo->table->time_to_eat);
-	increase_long(&philo->philo_mutex , &philo->eat_count);
+	increase_long(&philo->table->table_mutex, &philo->eat_count);
 	mutex_handle(&philo->left_fork->fork, UNLOCK);
 	mutex_handle(&philo->right_fork->fork, UNLOCK);
 }
@@ -66,12 +74,12 @@ static void	*solo_routine(t_philo *philo)
 	print_mutex(philo, FIRST_FORK);
 	while (check_bool(&philo->table->table_mutex,
 			&philo->table->running) == true)
-		usleep(100);
+		ft_usleep(100);
 	return (NULL);
 }
 
 static void make_philos_wait(t_philo *philo)
 {
 	if (philo->id % 2 == 0)
-		ft_usleep(1);
+		ft_usleep(40);
 }

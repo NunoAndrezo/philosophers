@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:48:00 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/04/18 02:26:53 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/22 00:40:03 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	print_mutex(t_philo *philo, t_print_status status)
 {
 	long	print_time;
 
-	if (check_bool(&philo->philo_mutex, &philo->full) == true)
+	if (philo->full == true)
 		return ;
 	if (check_bool(&philo->table->table_mutex, &philo->table->running) == false)
 		return ;
