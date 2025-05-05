@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 01:55:18 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/21 15:26:03 by nuno             ###   ########.fr       */
+/*   Updated: 2025/05/05 00:56:52 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	ft_atol_helper(char *s, long *i);
 
 void	error_and_exit(const char *str)
 {
-	printf(RED "Error %s\n" RESET, str);
+	printf(RED "Error: %s\n" RESET, str);
 	exit(1);
 }
 
@@ -66,33 +66,28 @@ static int	ft_atol_helper(char *s, long *i)
 	return (signal);
 }
 
-/* adicionar ao makefile a de cima.
-adicionar ao libft:
-ft_matrix_len(); */
 void	vileda(t_table *table)
 {
 	(void)table;
-/* 	int	i;
+ 	int	i;
 
 	i = -1;
 	if (!table)
 		return ;
-	if (table->num_of_threads_running == 0 && table->running == false)
+	if (table->philosophers)
 	{
-		if (table->philosophers)
-		{
 			while (++i < table->num_of_philos)
 				pthread_mutex_destroy(&table->forks[i].fork);
 			free(table->philosophers);
 			table->philosophers = NULL;
-		}
-		if (table->forks)
-		{
-			free(table->forks);
-			table->forks = NULL;
-			pthread_mutex_destroy(&table->print_mutex);
-			pthread_mutex_destroy(&table->table_mutex);
+	}
+	if (table->forks)
+	{
+		free(table->forks);
+		table->forks = NULL;
+		pthread_mutex_destroy(&table->print_mutex);
+		pthread_mutex_destroy(&table->table_mutex);
+	}
 	free(table);
 	table = NULL; 
-	}*/
 }

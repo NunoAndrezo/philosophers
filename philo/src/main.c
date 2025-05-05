@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:27:49 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/21 15:03:47 by nuno             ###   ########.fr       */
+/*   Updated: 2025/05/03 13:18:22 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ int	main(int arc, char **arv)
 		table = ft_calloc(1, sizeof(t_table));
 		if (!table)
 			error_and_exit(RED "Error: Malloc failed" RESET);
-		get_arg(table, arc, arv);
-		initiate(table);
+		get_args_and_initiate(table, arc, arv);
 		start(table);
 		vileda(table);
 	}

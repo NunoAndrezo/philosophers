@@ -6,16 +6,17 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:36:29 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/22 23:39:28 by nuno             ###   ########.fr       */
+/*   Updated: 2025/05/04 23:25:59 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
 static void	initiate_philosopher(t_table *table);
-static void	assign_forks(t_philo *philo, t_fork *forks, long index);
+static void	assign_forks(t_philo *philo, t_fork *forks, long i);
+static void	initiate(t_table *table);
 
-void	get_arg(t_table *table, int arc, char **arv)
+void	get_args_and_initiate(t_table *table, int arc, char **arv)
 {
 	table->num_of_philos = ft_atol(arv[1]);
 	table->num_of_forks = table->num_of_philos;
@@ -37,16 +38,15 @@ void	get_arg(t_table *table, int arc, char **arv)
 		table->nr_meals_limit = ft_atol(arv[5]);
 	else
 		table->nr_meals_limit = -1;
+	initiate(table);
 }
 
-void	initiate(t_table *table)
+static void	initiate(t_table *table)
 {
 	long	i;
 
 	table->start_time = 0;
-	table->philos_are_ready = false;
 	table->running = false;
-	table->num_threads_running = 0;
 	mutex_handle(&table->print_mutex, INIT);
 	mutex_handle(&table->table_mutex, INIT);
 	table->philosophers = (t_philo *)malloc(sizeof(t_philo)
@@ -74,27 +74,25 @@ static void	initiate_philosopher(t_table *table)
 		philo->id = i + 1;
 		philo->full = false;
 		philo->eat_count = 0;
-		philo->dead = false;
 		philo->table = table;
 		philo->time_last_eat = 0;
-		mutex_handle(&philo->philo_mutex, INIT);
 		assign_forks(philo, table->forks, i);
 	}
 }
 
-static void	assign_forks(t_philo *philo, t_fork *forks, long index)
+static void	assign_forks(t_philo *philo, t_fork *forks, long i)
 {
 	long	philo_nbr;
 
 	philo_nbr = philo->table->num_of_philos;
 	if (philo->id % 2 == 0)
 	{
-		philo->left_fork = &forks[index];
-		philo->right_fork = &forks[(index + 1) % philo_nbr];
+		philo->left_fork = &forks[i];
+		philo->right_fork = &forks[(i + 1) % philo_nbr];
 	}
 	else
 	{
-		philo->left_fork = &forks[(index + 1) % philo_nbr];
-		philo->right_fork = &forks[index];
+		philo->left_fork = &forks[(i + 1) % philo_nbr];
+		philo->right_fork = &forks[i];
 	}
 }

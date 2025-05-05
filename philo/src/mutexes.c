@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:48:00 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/04/22 00:40:03 by nuno             ###   ########.fr       */
+/*   Updated: 2025/05/04 19:38:05 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,13 @@ void	print_mutex(t_philo *philo, t_print_status status)
 
 	if (philo->full == true)
 		return ;
-	if (check_bool(&philo->table->table_mutex, &philo->table->running) == false)
-		return ;
 	pthread_mutex_lock(&philo->table->print_mutex);
-	print_time = get_time() - philo->table->start_time;
+	if (check_bool(&philo->table->table_mutex, &philo->table->running) == false)
+	{
+		pthread_mutex_unlock(&philo->table->print_mutex);
+		return ;
+	}
+	print_time = get_current_time(philo->table->start_time);
 	if ((FIRST_FORK == status || SECOND_FORK == status))
 		printf(BLUE "%ld " RESET "%ld has taken a fork\n", print_time,philo->id);
 	else if (status == EATING)

@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/22 23:34:19 by nuno             ###   ########.fr       */
+/*   Updated: 2025/05/04 23:26:14 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,7 @@ typedef struct s_philo
 	long		id;
 	long		eat_count;
 	bool		full;
-	bool		dead;
 	long		time_last_eat;
-	t_mutex	philo_mutex;
 	pthread_t	philo_thread;
 	t_fork		*left_fork;
 	t_fork		*right_fork;
@@ -96,11 +94,9 @@ struct	s_table
 	long		nr_meals_limit;
 	long		start_time;
 	bool		running;
-	bool		philos_are_ready;
-	long		num_threads_running;
 	t_philo		*philosophers;
 	t_fork		*forks;
-	pthread_t	monitor_thread;
+//	pthread_t	monitor_thread;
 	t_mutex		print_mutex;
 	t_mutex		table_mutex;
 };
@@ -109,8 +105,7 @@ struct	s_table
 //int	main(int arc, char **arv);
 
 //initiate.c
-void			get_arg(t_table *table, int arc, char **arv);
-void			initiate(t_table *table);
+void			get_args_and_initiate(t_table *table, int arc, char **arv);
 
 //checkers_and_changers.c
 void			change_bool(t_mutex *mutex, bool *var, bool value);
