@@ -28,10 +28,10 @@ LIBFT_DIR = libft
 PRINTF_DIR = printf
 
 # Source files
-SRC_FILES =	src/checkers_and_changers.c \
+SRC_FILES =	src/utils.c src/utils1.c \
 			src/initiate.c src/mutexes.c \
 			src/routine.c src/start.c \
-			src/time.c src/utils.c src/main.c \
+			src/time.c src/main.c src/solo_routine.c \
 
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
 DEPS = $(OBJ_FILES:.o=.d)

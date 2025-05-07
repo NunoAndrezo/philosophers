@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/05/04 23:26:14 by nuno             ###   ########.fr       */
+/*   Updated: 2025/05/07 23:07:53 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,31 +101,15 @@ struct	s_table
 	t_mutex		table_mutex;
 };
 
-//main.c
-//int	main(int arc, char **arv);
-
 //initiate.c
 void			get_args_and_initiate(t_table *table, int arc, char **arv);
 
-//checkers_and_changers.c
-void			change_bool(t_mutex *mutex, bool *var, bool value);
-bool			check_bool(t_mutex *mutex, bool *var);
-
-void			change_long(t_mutex *mutex, long *var, long value);
-long			check_long(t_mutex *mutex, long *var);
-void			increase_long(t_mutex *mutex, long *var);
-void			decrease_long(t_mutex *mutex, long *var);
-
-// time.c
-long			get_time();
-void			ft_usleep(long start);
-long			get_current_time(long current);
-
 //routine.c
 void			*routine(void *philoso);
+bool			philo_died(t_philo *philo);
 
-//monitor_routine.c
-void			*monitor_routine(void *table);
+//solo_routine.c
+void			*solo_routine(t_philo *philo);
 
 //mutexes.c
 void			mutex_handle(t_mutex *mutex, t_mutex_code code);
@@ -134,9 +118,21 @@ void			print_mutex(t_philo *philo, t_print_status status);
 //start.c
 void			start(t_table *table);
 
-//utils.c
+//utils.c && utils1.c
 void			error_and_exit(const char *str);
 long			ft_atol(char *s);
 void			vileda(t_table *table);
+void			change_bool(t_mutex *mutex, bool *var, bool value);
+bool			check_bool(t_mutex *mutex, bool *var);
+void			change_long(t_mutex *mutex, long *var, long value);
+long			check_long(t_mutex *mutex, long *var);
+void			increase_long(t_mutex *mutex, long *var);
+void			decrease_long(t_mutex *mutex, long *var);
+
+// time.c
+long			get_time(void);
+void			ft_usleep(long start);
+long			get_current_time(long current);
+void			usleep_with_checker(long time, t_philo *philo);
 
 #endif

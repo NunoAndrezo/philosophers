@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 01:55:18 by nuno              #+#    #+#             */
-/*   Updated: 2025/05/05 00:56:52 by nuno             ###   ########.fr       */
+/*   Updated: 2025/05/07 22:57:10 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,18 +68,18 @@ static int	ft_atol_helper(char *s, long *i)
 
 void	vileda(t_table *table)
 {
-	(void)table;
- 	int	i;
+	int	i;
 
+	(void)table;
 	i = -1;
 	if (!table)
 		return ;
 	if (table->philosophers)
 	{
-			while (++i < table->num_of_philos)
-				pthread_mutex_destroy(&table->forks[i].fork);
-			free(table->philosophers);
-			table->philosophers = NULL;
+		while (++i < table->num_of_philos)
+			pthread_mutex_destroy(&table->forks[i].fork);
+		free(table->philosophers);
+		table->philosophers = NULL;
 	}
 	if (table->forks)
 	{
@@ -89,5 +89,12 @@ void	vileda(t_table *table)
 		pthread_mutex_destroy(&table->table_mutex);
 	}
 	free(table);
-	table = NULL; 
+	table = NULL;
+}
+
+void	change_bool(t_mutex *mutex, bool *var, bool value)
+{
+	mutex_handle(mutex, LOCK);
+	*var = value;
+	mutex_handle(mutex, UNLOCK);
 }

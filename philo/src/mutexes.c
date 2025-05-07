@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mutexes.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:48:00 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/04 19:38:05 by nuno             ###   ########.fr       */
+/*   Updated: 2025/05/07 22:48:07 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,11 @@ void	print_mutex(t_philo *philo, t_print_status status)
 	}
 	print_time = get_current_time(philo->table->start_time);
 	if ((FIRST_FORK == status || SECOND_FORK == status))
-		printf(BLUE "%ld " RESET "%ld has taken a fork\n", print_time,philo->id);
+		printf(BLUE"%ld "RESET"%ld has taken a fork\n", print_time, philo->id);
 	else if (status == EATING)
-		printf(YELLOW "%ld " RESET "%ld is eating\n", print_time, philo->id);
+		printf(YELLOW"%ld "RESET"%ld is eating\n", print_time, philo->id);
 	else if (status == SLEEPING)
-		printf(MAGENTA "%ld " RESET "%ld is sleeping\n", print_time, philo->id);
+		printf(MAGENTA"%ld "RESET"%ld is sleeping\n", print_time, philo->id);
 	else if (status == THINKING)
 		printf(CYAN "%ld " RESET "%ld is thinking\n", print_time, philo->id);
 	else if (status == DEAD)

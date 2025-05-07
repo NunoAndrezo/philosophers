@@ -3,21 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   checkers_and_changers.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 15:29:51 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/21 14:14:46 by nuno             ###   ########.fr       */
+/*   Updated: 2025/05/07 22:43:08 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
-
-void	change_bool(t_mutex *mutex, bool *var, bool value)
-{
-	mutex_handle(mutex, LOCK);
-	*var = value;
-	mutex_handle(mutex, UNLOCK);
-}
 
 bool	check_bool(t_mutex *mutex, bool *var)
 {
