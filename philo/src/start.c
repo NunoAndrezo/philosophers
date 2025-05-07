@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:46:39 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/05 00:57:11 by nuno             ###   ########.fr       */
+/*   Updated: 2025/05/07 20:50:19 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ void	start(t_table *table)
 	{
 		if (pthread_create(&table->philosophers[i].philo_thread, NULL, routine,
 			&table->philosophers[i]) != 0)
-		{
-			vileda(table);
-			error_and_exit(RED "Error: Malloc failed" RESET);
-		}
+			{
+				vileda(table);
+				error_and_exit(RED "Error: Malloc failed" RESET);
+			}
 	}
 	change_long(&table->table_mutex, &table->start_time, get_time());
 	change_bool(&table->table_mutex, &table->running, true);

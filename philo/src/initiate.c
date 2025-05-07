@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initiate.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:36:29 by nuno              #+#    #+#             */
-/*   Updated: 2025/05/04 23:25:59 by nuno             ###   ########.fr       */
+/*   Updated: 2025/05/07 21:32:42 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,14 +85,24 @@ static void	assign_forks(t_philo *philo, t_fork *forks, long i)
 	long	philo_nbr;
 
 	philo_nbr = philo->table->num_of_philos;
-	if (philo->id % 2 == 0)
+	//if (philo->id % 2 == 0)
+	//{
+/*	if (philo_nbr % 2 != 0)
 	{
 		philo->left_fork = &forks[i];
 		philo->right_fork = &forks[(i + 1) % philo_nbr];
 	}
-	else
+	else*/
 	{
-		philo->left_fork = &forks[(i + 1) % philo_nbr];
-		philo->right_fork = &forks[i];
+		if (philo->id % 2 == 0)
+		{
+			philo->left_fork = &forks[(i + 1) % philo_nbr];
+			philo->right_fork = &forks[i];
+		}
+		else
+		{
+			philo->left_fork = &forks[i];
+			philo->right_fork = &forks[(i + 1) % philo_nbr];
+		}
 	}
 }
