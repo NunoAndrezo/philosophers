@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/05/07 23:07:53 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:09:33 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ struct	s_table
 {
 	long		num_of_philos;
 	long		num_of_forks;
+	long		num_of_threads_running;
 	long		time_to_die;
 	long		time_to_eat;
 	long		time_to_sleep;

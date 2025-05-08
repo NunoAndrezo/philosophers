@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 10:29:29 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/07 23:20:39 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:57:32 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ void	*routine(void *philosopher)
 	t_philo	*philo;
 
 	philo = (t_philo *)philosopher;
-	while (check_bool(&philo->table->table_mutex,
-			&philo->table->running) == false);
 	if (philo->table->num_of_philos == 1)
 		return (solo_routine(philo), NULL);
+	while (check_bool(&philo->table->table_mutex,
+			&philo->table->running) == false);
 	if (philo->id % 2 == 0)
-		usleep((philo->table->time_to_sleep / 5) * 1000);
+		usleep(5 * 1000);
 	while (1)
 	{
 		if (checker_helper(philo))
@@ -45,15 +45,6 @@ void	*routine(void *philosopher)
 	return (NULL);
 }
 
-static void	thinking(t_philo *philo)
-{
-	print_mutex(philo, THINKING);
-	if (philo->table->num_of_philos % 2 != 0
-		&& philo->table->time_to_eat > philo->table->time_to_sleep)
-		usleep_with_checker((philo->table->time_to_eat
-				- philo->table->time_to_sleep) + 10, philo);
-}
-
 static void	arroz_de_cabidela(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->left_fork->fork);
@@ -65,10 +56,26 @@ static void	arroz_de_cabidela(t_philo *philo)
 	philo->time_last_eat = get_current_time(philo->table->start_time);
 	mutex_handle(&philo->left_fork->fork, UNLOCK);
 	mutex_handle(&philo->right_fork->fork, UNLOCK);
-	increase_long(&philo->table->table_mutex, &philo->eat_count);
-	if (philo->table->nr_meals_limit <= philo->eat_count
-		&& philo->table->nr_meals_limit > 0)
+	philo->eat_count++;
+	if (philo->table->nr_meals_limit
+		<= philo->eat_count && philo->table->nr_meals_limit > 0)
 		philo->full = true;
+}
+
+static void	thinking(t_philo *philo)
+{
+	print_mutex(philo, THINKING);
+	if (philo->table->num_of_philos % 2 != 0
+		&& philo->table->time_to_eat >= philo->table->time_to_sleep)
+		usleep_with_checker((philo->table->time_to_eat
+				- philo->table->time_to_sleep) + 5, philo);
+	else if (philo->table->num_of_philos % 2 == 0
+		&& philo->table->time_to_eat >= philo->table->time_to_sleep)
+	{
+		if (philo->id % 2 != 0)
+			usleep_with_checker((philo->table->time_to_eat
+					- philo->table->time_to_sleep) + 5, philo);
+	}
 }
 
 bool	philo_died(t_philo *philo)
@@ -82,7 +89,7 @@ bool	philo_died(t_philo *philo)
 	elapsed_since_food = now - philo->time_last_eat;
 	if (elapsed_since_food > philo->table->time_to_die)
 	{
-		mutex_handle(&philo->table->table_mutex, LOCK);
+		pthread_mutex_lock(&philo->table->table_mutex);
 		if (philo->table->running == false)
 		{
 			mutex_handle(&philo->table->table_mutex, UNLOCK);

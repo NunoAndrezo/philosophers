@@ -6,19 +6,19 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:46:39 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/07 22:55:54 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:55:56 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
+static void	error_meals(t_table *table);
+
 void	start(t_table *table)
 {
 	long	i;
 
-	if (table->nr_meals_limit == 0)
-		return (vileda(table),
-			error_and_exit("Everyone died of hunger"), (void)0);
+	error_meals(table);
 	i = -1;
 	while (++i < table->num_of_philos)
 	{
@@ -26,9 +26,12 @@ void	start(t_table *table)
 				&table->philosophers[i]) != 0)
 		{
 			vileda(table);
-			error_and_exit(RED "Error: Malloc failed" RESET);
+			error_and_exit(RED "Malloc failed" RESET);
 		}
+		table->num_of_threads_running++;
 	}
+	while (table->num_of_threads_running < table->num_of_philos)
+		;
 	change_long(&table->table_mutex, &table->start_time, get_time());
 	change_bool(&table->table_mutex, &table->running, true);
 	i = -1;
@@ -37,5 +40,14 @@ void	start(t_table *table)
 		if (pthread_join(table->philosophers[i].philo_thread, NULL) != 0)
 			return (vileda(table),
 				error_and_exit(RED "Pthread join failed" RESET), (void) NULL);
+	}
+}
+
+static void	error_meals(t_table *table)
+{
+	if (table->nr_meals_limit == 0)
+	{
+		vileda(table);
+		error_and_exit("Everyone died of hunger");
 	}
 }
