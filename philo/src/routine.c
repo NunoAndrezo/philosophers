@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 10:29:29 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/08 20:57:32 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/08 22:13:54 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	*routine(void *philosopher)
 		if (checker_helper(philo))
 			return (NULL);
 		arroz_de_cabidela(philo);
-		if (checker_helper(philo))
+		if (checker_helper(philo) == true)
 			return (NULL);
 		print_mutex(philo, SLEEPING);
 		usleep_with_checker(philo->table->time_to_sleep, philo);
@@ -64,18 +64,36 @@ static void	arroz_de_cabidela(t_philo *philo)
 
 static void	thinking(t_philo *philo)
 {
+	long	wait_time;
+
 	print_mutex(philo, THINKING);
-	if (philo->table->num_of_philos % 2 != 0
-		&& philo->table->time_to_eat >= philo->table->time_to_sleep)
-		usleep_with_checker((philo->table->time_to_eat
-				- philo->table->time_to_sleep) + 5, philo);
+	/*if (philo->table->num_of_philos % 2 != 0)
+	{
+		if (philo->table->time_to_eat > philo->table->time_to_sleep)
+		{
+			if (philo->id % 2 != 0)
+				usleep((philo->table->time_to_eat - philo->table->time_to_sleep) * 1000);
+		}
+		else if (philo->table->time_to_eat == philo->table->time_to_sleep)
+		{	
+			if (philo->id % 2 != 0)
+				usleep(2 * 1000);
+		}
+	}
 	else if (philo->table->num_of_philos % 2 == 0
-		&& philo->table->time_to_eat >= philo->table->time_to_sleep)
+		&& philo->table->time_to_eat > philo->table->time_to_sleep)
 	{
 		if (philo->id % 2 != 0)
-			usleep_with_checker((philo->table->time_to_eat
-					- philo->table->time_to_sleep) + 5, philo);
-	}
+			usleep((philo->table->time_to_eat - philo->table->time_to_sleep) * 1000);
+	}*/
+	pthread_mutex_lock(&philo->table->table_mutex);
+	wait_time = philo->table->time_to_eat - philo->table->time_to_sleep;
+	if (wait_time < 0)
+		wait_time = 2;
+	if (philo->table->num_of_philos % 2 != 0
+		&& philo->table->time_to_eat >= philo->table->time_to_sleep)
+		usleep(wait_time * 1000);
+	pthread_mutex_unlock(&philo->table->table_mutex);
 }
 
 bool	philo_died(t_philo *philo)
@@ -108,9 +126,9 @@ bool	philo_died(t_philo *philo)
 static bool	checker_helper(t_philo *philo)
 {
 	if (philo_died(philo) == true)
-		return (1);
+		return (true);
 	if (check_bool(&philo->table->table_mutex,
 			&philo->table->running) == false)
-		return (1);
-	return (0);
+		return (true);
+	return (false);
 }
