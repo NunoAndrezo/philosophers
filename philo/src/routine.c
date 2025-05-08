@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 10:29:29 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/08 22:13:54 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/08 22:32:14 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,28 +67,9 @@ static void	thinking(t_philo *philo)
 	long	wait_time;
 
 	print_mutex(philo, THINKING);
-	/*if (philo->table->num_of_philos % 2 != 0)
-	{
-		if (philo->table->time_to_eat > philo->table->time_to_sleep)
-		{
-			if (philo->id % 2 != 0)
-				usleep((philo->table->time_to_eat - philo->table->time_to_sleep) * 1000);
-		}
-		else if (philo->table->time_to_eat == philo->table->time_to_sleep)
-		{	
-			if (philo->id % 2 != 0)
-				usleep(2 * 1000);
-		}
-	}
-	else if (philo->table->num_of_philos % 2 == 0
-		&& philo->table->time_to_eat > philo->table->time_to_sleep)
-	{
-		if (philo->id % 2 != 0)
-			usleep((philo->table->time_to_eat - philo->table->time_to_sleep) * 1000);
-	}*/
 	pthread_mutex_lock(&philo->table->table_mutex);
 	wait_time = philo->table->time_to_eat - philo->table->time_to_sleep;
-	if (wait_time < 0)
+	if (wait_time <= 0)
 		wait_time = 2;
 	if (philo->table->num_of_philos % 2 != 0
 		&& philo->table->time_to_eat >= philo->table->time_to_sleep)
