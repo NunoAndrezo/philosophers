@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initiate.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:36:29 by nuno              #+#    #+#             */
-/*   Updated: 2025/05/08 17:09:46 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/12 01:32:27 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,37 @@
 
 static void	initiate_philosopher(t_table *table);
 static void	assign_forks(t_philo *philo, t_fork *forks, long i);
-static void	initiate(t_table *table);
+static int	initiate(t_table *table);
 
-void	get_args_and_initiate(t_table *table, int arc, char **arv)
+int	get_args_and_initiate(t_table *table, int arc, char **arv)
 {
 	table->num_of_philos = ft_atol(arv[1]);
 	table->num_of_forks = table->num_of_philos;
 	table->time_to_die = (ft_atol(arv[2]));
 	table->time_to_eat = (ft_atol(arv[3]));
 	table->time_to_sleep = (ft_atol(arv[4]));
-	if (table->time_to_die < 60 || table->time_to_eat < 60
-		|| table->time_to_sleep < 60)
+	if (table->time_to_die < 60 || table->time_to_die > 1000000
+		|| table->time_to_eat < 60 || table->time_to_eat > 1000000
+		|| table->time_to_sleep < 60 || table->time_to_sleep > 1000000)
 	{
 		vileda(table);
-		error_and_exit(RED "Use timestamps bigger than 60ms" RESET);
+		return (ft_error(RED "Use proper timestamps [60ms-10000ms]" RESET));
 	}
 	if (table->num_of_philos <= 0 || table->num_of_philos > 200)
 	{
 		vileda(table);
-		error_and_exit(RED "Number of philosophers [1-200]" RESET);
+		return (ft_error(RED "Number of philosophers [1-200]" RESET));
 	}
 	if (arc == 6)
 		table->nr_meals_limit = ft_atol(arv[5]);
 	else
 		table->nr_meals_limit = -1;
-	initiate(table);
+	if (initiate(table))
+		return (vileda(table), ft_error(RED "Malloc failed" RESET));
+	return (0);
 }
 
-static void	initiate(t_table *table)
+static int	initiate(t_table *table)
 {
 	long	i;
 
@@ -53,14 +56,15 @@ static void	initiate(t_table *table)
 	table->philosophers = (t_philo *)malloc(sizeof(t_philo)
 			* table->num_of_philos);
 	if (!table->philosophers)
-		error_and_exit(RED "Error: Malloc failed" RESET);
+		return (ft_error(RED "Error: Malloc failed" RESET));
 	table->forks = (t_fork *)malloc(sizeof(t_fork) * table->num_of_forks);
 	if (!table->forks)
-		error_and_exit(RED "Error: Malloc failed" RESET);
+		return (ft_error(RED "Error: Malloc failed" RESET));
 	i = -1;
 	while (++i < table->num_of_philos)
 		mutex_handle(&table->forks[i].fork, INIT);
 	initiate_philosopher(table);
+	return (0);
 }
 
 static void	initiate_philosopher(t_table *table)

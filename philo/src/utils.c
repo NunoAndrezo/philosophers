@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 01:55:18 by nuno              #+#    #+#             */
-/*   Updated: 2025/05/07 22:57:10 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/12 01:30:56 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 static int	ft_atol_helper(char *s, long *i);
 
-void	error_and_exit(const char *str)
+int	ft_error(const char *str)
 {
 	printf(RED "Error: %s\n" RESET, str);
-	exit(1);
+	return (-2147483648);
 }
 
 long	ft_atol(char *s)
@@ -29,7 +29,7 @@ long	ft_atol(char *s)
 	i = 0;
 	r = 0;
 	if (!s || !s[0])
-		error_and_exit("Invalid Arguments in ft_atol");
+		return (ft_error("Invalid Arguments in ft_atol"), -2147483648);
 	while (s[i] == ' ')
 		i++;
 	signal = ft_atol_helper(s, &i);
@@ -41,11 +41,10 @@ long	ft_atol(char *s)
 			r += s[i++] - '0';
 		}
 		else
-			error_and_exit("Invalid Arguments");
+			return (ft_error("Invalid Arguments"), -2147483648);
 	}
-	if (r > LONG_MAX / 10
-		|| (r == LONG_MAX / 10 && (s[i] - '0') > LONG_MAX % 10))
-		error_and_exit("Number out of range");
+	if (r >= INT_MAX)
+		return (ft_error("INT_MAX is the limit"), -2147483648);
 	return (r * signal);
 }
 

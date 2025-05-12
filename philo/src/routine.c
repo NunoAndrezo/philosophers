@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 10:29:29 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/08 22:32:14 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/11 13:13:59 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	*routine(void *philosopher)
 	while (check_bool(&philo->table->table_mutex,
 			&philo->table->running) == false);
 	if (philo->id % 2 == 0)
-		usleep(5 * 1000);
+		usleep(philo->table->time_to_eat * 1000);
 	while (1)
 	{
 		if (checker_helper(philo))
@@ -65,16 +65,14 @@ static void	arroz_de_cabidela(t_philo *philo)
 static void	thinking(t_philo *philo)
 {
 	long	wait_time;
-
-	print_mutex(philo, THINKING);
-	pthread_mutex_lock(&philo->table->table_mutex);
+	
 	wait_time = philo->table->time_to_eat - philo->table->time_to_sleep;
-	if (wait_time <= 0)
-		wait_time = 2;
+	if (wait_time < 0)
+		wait_time = 1;
+	print_mutex(philo, THINKING);
 	if (philo->table->num_of_philos % 2 != 0
 		&& philo->table->time_to_eat >= philo->table->time_to_sleep)
-		usleep(wait_time * 1000);
-	pthread_mutex_unlock(&philo->table->table_mutex);
+		usleep((wait_time + 1) * 1000);
 }
 
 bool	philo_died(t_philo *philo)

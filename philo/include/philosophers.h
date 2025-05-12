@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:10:37 by nuno              #+#    #+#             */
-/*   Updated: 2025/05/08 17:09:33 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/12 01:18:34 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@
 # include <stdbool.h>
 # include <stdint.h>
 # include <limits.h>
-# include "../libft/libft.h"
-# include "../printf/ft_printf.h"
 # include <errno.h>
 
 # define RESET		"\x1b[0m"
@@ -68,8 +66,8 @@ typedef enum e_mutex_code
 
 typedef struct s_fork
 {
-	long	id;
-	t_mutex	fork;
+	long		id;
+	t_mutex		fork;
 }		t_fork;
 
 typedef struct s_philo
@@ -97,13 +95,12 @@ struct	s_table
 	bool		running;
 	t_philo		*philosophers;
 	t_fork		*forks;
-//	pthread_t	monitor_thread;
 	t_mutex		print_mutex;
 	t_mutex		table_mutex;
 };
 
 //initiate.c
-void			get_args_and_initiate(t_table *table, int arc, char **arv);
+int				get_args_and_initiate(t_table *table, int arc, char **arv);
 
 //routine.c
 void			*routine(void *philoso);
@@ -113,14 +110,14 @@ bool			philo_died(t_philo *philo);
 void			*solo_routine(t_philo *philo);
 
 //mutexes.c
-void			mutex_handle(t_mutex *mutex, t_mutex_code code);
+int				mutex_handle(t_mutex *mutex, t_mutex_code code);
 void			print_mutex(t_philo *philo, t_print_status status);
 
 //start.c
-void			start(t_table *table);
+int				start(t_table *table);
 
 //utils.c && utils1.c
-void			error_and_exit(const char *str);
+int				ft_error(const char *str);
 long			ft_atol(char *s);
 void			vileda(t_table *table);
 void			change_bool(t_mutex *mutex, bool *var, bool value);
@@ -135,5 +132,8 @@ long			get_time(void);
 void			ft_usleep(long start);
 long			get_current_time(long current);
 void			usleep_with_checker(long time, t_philo *philo);
+
+// ft_calloc.c
+void			*ft_calloc(size_t nmemb, size_t size);
 
 #endif

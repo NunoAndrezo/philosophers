@@ -6,13 +6,24 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 16:27:45 by nneves-a          #+#    #+#             */
-/*   Updated: 2024/12/15 03:24:48 by nuno             ###   ########.fr       */
+/*   Updated: 2025/05/10 19:22:56 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include "libft.h"
+#include "../include/philosophers.h"
+
+static void	ft_bzero(void *s, size_t n)
+{
+	unsigned char	*ptr;
+
+	ptr = (unsigned char *) s;
+	while (n > 0)
+	{
+		*ptr = 0;
+		ptr++;
+		n--;
+	}
+}
 
 void	*ft_calloc(size_t nmemb, size_t size)
 {

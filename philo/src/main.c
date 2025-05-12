@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 21:27:49 by nuno              #+#    #+#             */
-/*   Updated: 2025/05/03 13:18:22 by nuno             ###   ########.fr       */
+/*   Updated: 2025/05/12 01:52:26 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static bool	is_args_good(char **arv, int arc);
 static bool	check_len(char *s);
+static bool	ft_strlen(char *s);
 
 int	main(int arc, char **arv)
 {
@@ -22,17 +23,19 @@ int	main(int arc, char **arv)
 	if (arc == 5 || arc == 6)
 	{
 		if (is_args_good(arv, arc) == false)
-			error_and_exit("Arguments are wrong");
+			return (ft_error("Arguments are wrong"));
 		table = ft_calloc(1, sizeof(t_table));
 		if (!table)
-			error_and_exit(RED "Error: Malloc failed" RESET);
-		get_args_and_initiate(table, arc, arv);
-		start(table);
+			return (ft_error(RED "Error: Malloc failed" RESET), 1);
+		if (get_args_and_initiate(table, arc, arv))
+			return (1);
+		if (start(table))
+			return (1);
 		vileda(table);
 	}
 	else
-		error_and_exit(RED "Invalid number of arguments\n"
-			RESET GREEN "Correct is ex: ./philo 5 800 200 200 [7]" RESET);
+		return (ft_error(RED"Invalid number of arguments\n"
+			RESET GREEN"Correct is ex: ./philo 5 800 200 200 [7]"RESET));
 	return (0);
 }
 
@@ -45,7 +48,7 @@ static bool	is_args_good(char **arv, int arc)
 	while (i < arc)
 	{
 		if (check_len(arv[i]) == false)
-			error_and_exit("INT_MAX is the limit");
+			return (false);
 		j = 0;
 		while (arv[i][j] == ' ')
 			j++;
@@ -68,4 +71,14 @@ static bool	check_len(char *s)
 	if (i > 10)
 		return (false);
 	return (true);
+}
+
+static bool	ft_strlen(char *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
 }

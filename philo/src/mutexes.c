@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   mutexes.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:48:00 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/08 21:17:59 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/12 00:51:03 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-void	mutex_handle(t_mutex *mutex, t_mutex_code code)
+int	mutex_handle(t_mutex *mutex, t_mutex_code code)
 {
 	if (code == INIT)
 		pthread_mutex_init(mutex, NULL);
@@ -23,7 +23,8 @@ void	mutex_handle(t_mutex *mutex, t_mutex_code code)
 	else if (code == DESTROY)
 		pthread_mutex_destroy(mutex);
 	else
-		error_and_exit(RED "Wrong mutex code" RESET);
+		return (ft_error(RED "Wrong mutex code" RESET));
+	return (0);
 }
 
 void	print_mutex(t_philo *philo, t_print_status status)
