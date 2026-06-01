@@ -1,4 +1,4 @@
-# 🧘 Philosophers – 42 Lisbon
+# Philosophers 🧘 
 
 > A concurrent programming project simulating the famous **Dining Philosophers** problem using threads and mutexes. Developed as part of the 42 Lisbon core curriculum.
 
