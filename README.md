@@ -4,7 +4,7 @@
 
 ---
 
-## 🧠 Project Overview
+## Project Overview
 
 The **Philosophers** project explores the classic concurrency challenge of synchronizing multiple entities (philosophers) sharing finite resources (forks) without causing **deadlocks**, **race conditions**, or **starvation**.
 
@@ -18,7 +18,7 @@ The challenge lies in ensuring that no two neighboring philosophers eat at the s
 
 ---
 
-## 📜 Rules
+## Rules
 
 - Philosophers **don’t communicate** with each other.
 - They must **not die** (i.e., fail to eat within a given time).
@@ -31,9 +31,9 @@ The challenge lies in ensuring that no two neighboring philosophers eat at the s
 
 ---
 
-## ⚙️ Input Parameters
+## Input Parameters
 
-Your program must be run as:
+The program must be run as:
 
 ```bash
 ./philo <number_of_philosophers> <time_to_die> <time_to_eat> <time_to_sleep> [number_of_times_each_philosopher_must_eat]
